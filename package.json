@@ -1,0 +1,8 @@
+{
+	"name": "fflip",
+	"description": "Feature Flipping",
+	"author": "Fred Schott <fredkschott@gmail.com>",
+	"version": "0.0.1",
+	"dependencies": {
+	}
+}

@@ -50,7 +50,9 @@ var features = {
 
 ###Configuring fflip
 ```javascript
+// Include fflip
 var fflip = require('fflip');
+
 // Configure using variables defined above
 fflip.config({
   criteria: criteria,

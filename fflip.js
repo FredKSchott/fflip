@@ -6,14 +6,18 @@
 //--------------------------------------------------------------------------
 // Private
 //--------------------------------------------------------------------------
-var features = require('./features'),
-    criteria = require('./criteria');
+var features = {},
+    criteria = {};
 
 
 //--------------------------------------------------------------------------
 // Public
 //--------------------------------------------------------------------------
 var self = module.exports = {
+    config: function(params) {
+        criteria = params.criteria || {};
+        features = params.features || {};
+    },
     /**
      * Description of function.
      * @param user
@@ -24,7 +28,6 @@ var self = module.exports = {
         Object.keys(features).forEach(function(f_name) {
             user_features[f_name] = self.userHasFeature(user, f_name);
         });
-        console.log(user_features);
         return user_features;
     },
     userHasFeature: function(user, f_name) {

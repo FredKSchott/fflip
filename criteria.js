@@ -1,14 +1,14 @@
 module.exports = {
-	allowUserIDs: function(user, data) {
-		for(var id in data.idArray) {
-			if(user.id == id) return true;
+	allowUserIDs: function(user, idArr) {
+		for(var id in idArr) {
+			if(user.id == idArr[id]) return true;
 		}
 		return false;
 	},
-	percentageOfUsers: function(user, data) {
-		return (user.id % 100 < data.percent * 100);
+	percentageOfUsers: function(user, percent) {
+		return (user.id % 100 < percent * 100);
 	},
-	isFreeUser: function(user, data) {
-		return !user.paid;
+	isPaidUser: function(user, isPaid) {
+		return user.isPaid == isPaid;
 	}
-}
+};

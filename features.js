@@ -1,10 +1,22 @@
 module.exports = {
 	newFeature1: {
-		percentageOfUsers: {percent: 0.99},
-		isFreeUser: {}
+		percentageOfUsers: 0.99,
+		isPaidUser: false
 	},
-	newFeature2: {
-		percentageOfUsers: {percent: 0.1},
-		isFreeUser: {}
+  newFeature2: {
+    isPaidUser: false,
+    allowUserIDs: [1,2,3,5]
+  },
+  newFeature3: {
+    isPaidUser: false,
+    allowUserIDs: [1,20,50]
+  },
+  newFeature4: {
+    isPaidUser: true,
+    allowUserIDs: [1,20,50]
+  },
+	newFeature5: {
+		percentageOfUsers: 0.1,
+		isPaidUser: true
 	}
-}
+};

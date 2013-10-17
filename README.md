@@ -12,49 +12,50 @@ Working on a feature on your team? Starting a closed Beta? Rolling out a feature
 `npm install --save fflip`
 
 ##Usage
-####Defining Criteria & Features
+####Defining Criteria
 ```javascript
-// Include fflip
-var fflip = require('fflip');
-
-// Configure Some Criteria
-fflip.config({
-  criteria: {
-    percentageOfUsers: function(user, percent) {
-      return (user.id % 100 < percent * 100);
-    },
-    isPaidUser: function(user, isPaid) {
-      return user.isPaid == isPaid;
-    },
-    allowUserIDs: function(user, idArr) {
-      for(var id in idArr) {
-        if(user.id == idArr[id]) return true;
-      }
-      return false;
+var criteria = {
+  isPaidUser: function(user, isPaid) {
+    return user.isPaid == isPaid;
+  },
+  percentageOfUsers: function(user, percent) {
+    return (user.id % 100 < percent * 100);
+  },
+  allowUserIDs: function(user, idArr) {
+    for(var id in idArr) {
+      if(user.id == idArr[id]) return true;
     }
+    return false;
   }
-});
-
-// Add Some Features
-fflip.config({
-  features: {
-    paidFeature: {
-      isPaidUser: true
-    },
-    closedBeta: {
-      allowUserIDs: [20,30,50,181],
-    },
-    newFeatureRollout: {
-      isPaidUser: false,
-      percentageOfUsers: 0.50,
-    },
-  }
-});
+}
 ```
 
-This can be shortened by seperating your features & criteria into seperate sections
+#### Add Some Features
 ```javascript
-// Cleaner Configuration via require() 
+var features = {
+  paidFeature: {
+    isPaidUser: true
+  },
+  closedBeta: {
+    allowUserIDs: [20,30,50,181],
+  },
+  newFeatureRollout: {
+    isPaidUser: false,
+    percentageOfUsers: 0.50,
+  }
+}
+```
+
+####Configuring fflip
+```javascript
+var fflip = require('fflip');
+// Configure using variables defined above
+fflip.config({
+  criteria: criteria,
+  features: features
+});
+
+// Cleaner configuration via require() 
 fflip.config({
   criteria: require('./criteria'),
   features: require('./features')

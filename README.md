@@ -80,6 +80,7 @@ if(Features.closedBeta) {
 
 ####Extending Your User Object
 ```javascript
+// Add a hasFeature() method to your User Object
 var paidUser = {
   id: 30,
   isPaid: false,

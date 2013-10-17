@@ -1,12 +1,12 @@
 ![icon](fflipIcon.png) fflip
 ============================
 
-Working on a secret new toolbar? Starting a closed Beta? Rolling out a new feature over the next few weeks? Fa-fa-fa-fa-fa-fa-fa-fa-flip it! __fflip__ gives you complete control over releasing new functionality to your users, based on thier user id, join date, paid status, and whatever else you can think of. `fflip`'s goal is to be the most extendable feature flipping module out there, with a focus on both large and small teams.
+Working on a secret new toolbar? Starting a closed Beta? Rolling out a new feature over the next few weeks? Fa-fa-fa-fa-fa-fa-fa-fa-flip it! __fflip__ gives you complete control over releasing new functionality to your users, based on thier user id, join date, paid status, and whatever else you can think of. __fflip's__ goal is to be the most extendable feature flipping/toggling module out there, with a focus on both large and small teams.
 
 ##Features
-- Easily create custom criteria rules based on how your users are represented
-- Abstract them away, so that feature creators don't need to touch them
-- Intuitively create and describe new features, all in easy-to-read json
+- Easily create custom criteria rules based on how your user properties
+- Abstract them away, so that features can be created without even touching code
+- Intuitively create and describe new features using easy-to-read json
 
 ##Installation
 `npm install fflip`

@@ -91,7 +91,7 @@ var paidUser = {
   hasFeature: function(feature) { return fflip.userHasFeature(freeUser, feature); }
 };
 
-// Test User Features
+// Test Specific User Features
 console.log(freeUser.hasFeature('newFeatureRollout'));
 ```
 

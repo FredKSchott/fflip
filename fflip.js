@@ -15,8 +15,8 @@ var features = {},
 //--------------------------------------------------------------------------
 var self = module.exports = {
     config: function(params) {
-        criteria = params.criteria || {};
-        features = params.features || {};
+        criteria = params.criteria || criteria;
+        features = params.features || features;
     },
     /**
      * Description of function.

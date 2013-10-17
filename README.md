@@ -12,7 +12,8 @@ Working on a secret new toolbar? Starting a closed Beta? Rolling out a new featu
 `npm install fflip`
 
 ##Usage
-####Defining Criteria
+###Defining Criteria
+Criteria are the rules that features can test users against. Each rule takes a user and an argument to test that user object against.
 ```javascript
 var criteria = {
   isPaidUser: function(user, isPaid) {
@@ -30,7 +31,8 @@ var criteria = {
 }
 ```
 
-#### Add Some Features
+### Defining Features
+Features are a suite of rules to test users against. Each feature is an object of key value pairs, where the key is the rule name and the value is the argument to pass to the rule.
 ```javascript
 var features = {
   paidFeature: {
@@ -46,7 +48,7 @@ var features = {
 }
 ```
 
-####Configuring fflip
+###Configuring fflip
 ```javascript
 var fflip = require('fflip');
 // Configure using variables defined above
@@ -62,7 +64,7 @@ fflip.config({
 });
 ```
 
-####Testing Features
+###Testing Features
 ```javascript
 // Define a Test User
 var freeUser = {
@@ -78,7 +80,7 @@ if(Features.closedBeta) {
 
 ```
 
-####Extending Your User Object
+###Extending Your User Object
 ```javascript
 // Add a hasFeature() method to your User Object
 var paidUser = {

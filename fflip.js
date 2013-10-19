@@ -3,21 +3,95 @@
  * @author ldap name
  */
 
+
 //--------------------------------------------------------------------------
 // Private
 //--------------------------------------------------------------------------
 var features = {},
-    criteria = {};
+    criteria = {},
+    getFeatures,
+    getCriteria,
+    refreshRate = false,
+    refreshIntrval;
 
+function updateCriteria() {
+    if(!getCriteria) {
+        return;
+    } else if(getCriteria.length === 0) {
+        criteria = getCriteria() || criteria;
+        return;
+    } else if(getCriteria.length === 1) {
+        getCriteria(getCriteriaCallback);
+        return;
+    } else if(getCriteria.length > 1) {
+        throw new Error('Too Many Arguments!');
+    }
+}
+
+function updateFeatures() {
+    if(!getFeatures) {
+        return;
+    } else if(getFeatures.length === 0) {
+        features = getFeatures() || features;
+        return;
+    } else if(getFeatures.length === 1) {
+        getFeatures(getFeaturesCallback);
+        return;
+    } else if(getFeatures.length > 1) {
+        throw new Error('Too Many Arguments!');
+    }
+}
+
+function setCriteria(params) {
+    if(params.criteria instanceof Function) {
+        getCriteria = params.criteria;
+    } else {
+        getCriteria = undefined;
+    }
+    updateCriteria();
+}
+
+function setFeatures(params) {
+    if(params.features instanceof Function) {
+        getFeatures = params.features;
+    } else {
+        getFeatures = undefined;
+    }
+    updateFeatures();
+}
+
+function getFeaturesCallback(err, data) {
+    if(err) throw err;
+    features = data || features;
+}
+function getCriteriaCallback(err, data) {
+    if(err) throw err;
+    features = data || features;
+}
 
 //--------------------------------------------------------------------------
 // Public
 //--------------------------------------------------------------------------
 var self = module.exports = {
     config: function(params) {
-        criteria = params.criteria || criteria;
-        features = params.features || features;
+        // Set Criteria & Features
+        setCriteria(params);
+        setFeatures(params);
+
+        // Refresh Rate
+        refreshRate = params.reload*1000 || refreshRate;
+        if(refreshRate)
+            refreshIntrval = setInterval(self.reload, refreshRate);
+        else
+            clearInterval(refreshIntrval);
     },
+
+    reload: function() {
+        console.log('reload');
+        updateCriteria();
+        updateFeatures();
+    },
+
     /**
      * Description of function.
      * @param user
@@ -30,6 +104,7 @@ var self = module.exports = {
         });
         return user_features;
     },
+
     userHasFeature: function(user, f_name) {
         var criterias = features[f_name];
         var f_enabled = true;

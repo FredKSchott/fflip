@@ -3,17 +3,17 @@
 
 Working on a secret new toolbar? Starting a closed Beta? Rolling out a new feature over the next few weeks? Fa-fa-fa-flip it! __fflip__ gives you complete control over releasing new functionality to your users, based on thier user id, join date, paid status, and whatever else you can think of. __fflip's__ goal is to be the most extendable feature flipping/toggling module out there, with a focus on both large and small teams.
 
-##Features
-
 - Create a list of criteria for features to test user against, based on whatever user properties you have
 - Abstract them away, describe features verbally using easy-to-read json
-- Store your data in a file, or grab it from a database. Supports Syncronous & Asyncronous loading of new features & criteria. 
+- Store your data in a file, or grab it from a database. Supports Syncronous & Asyncronous loading of new features & criteria.
 
-##Installation
-`npm install fflip`
+Install with:
+```
+npm install fflip
+```
 
-##Configuration
-###Defining Criteria
+##Getting Started
+###Criteria
 Criteria are the rules that features can test users against. Each rule takes a user and an data argument to test the user against, and returns true/false if the user matches that criteria. The data argument can be any type, as long as you handle it correctly in the function you describe.
 ```javascript
 var Criteria = {    
@@ -32,7 +32,7 @@ var Criteria = {
 }
 ```
 
-### Defining Features
+###Features
 Features are sets of criteria to test users against. A user has a featured enabled if they match all listed criteria, otherwise the feature is disabled. Features are described as follows:
 ```javascript
 var Features = {
@@ -49,7 +49,8 @@ var Features = {
 }
 ```
 
-###Configuring fflip
+##Usage
+Below is a simple example:
 ```javascript
 // Include fflip
 var fflip = require('fflip');
@@ -59,10 +60,7 @@ fflip.config({
   criteria: Criteria,
   features: Features
 });
-```
-##Usage
-###Testing Features
-```javascript
+
 // Define a Test User
 var freeUser = {
   id: 80,

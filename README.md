@@ -16,7 +16,7 @@ npm install fflip
 ###Criteria
 Criteria are the rules that features can test users against. Each rule takes a user and an data argument to test the user against, and returns true/false if the user matches that criteria. The data argument can be any type, as long as you handle it correctly in the function you describe.
 ```javascript
-var Criteria = {    
+var ExampleCriteria = {    
   isPaidUser: function(user, isPaid) {
     return user.isPaid == isPaid;
   },
@@ -35,7 +35,7 @@ var Criteria = {
 ###Features
 Features are sets of criteria to test users against. A user has a featured enabled if they match all listed criteria, otherwise the feature is disabled. Features are described as follows:
 ```javascript
-var Features = {
+var ExampleFeatures = {
   paidFeature: {
     isPaidUser: true
   },
@@ -57,8 +57,8 @@ var fflip = require('fflip');
 
 // Configure using variables defined above
 fflip.config({
-  criteria: Criteria,
-  features: Features
+  criteria: ExampleCriteria,
+  features: ExampleFeatures
 });
 
 // Define a Test User

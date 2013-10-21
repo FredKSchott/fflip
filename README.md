@@ -81,18 +81,20 @@ if(Features.closedBeta) {
 var paidUser = {
   id: 30,
   isPaid: false,
-  hasFeature: function(feature) { return fflip.userHasFeature(freeUser, feature); },
+  hasFeature: function(feature) { return fflip.userHasFeature(paidUser, feature); },
   /* ... */
 };
 
 // Test Specific User Features
-console.log(freeUser.hasFeature('newFeatureRollout'));
+if(paidUser.hasFeature('newFeatureRollout')) {
+  /* Do Some newFeauture Behavior... */
+}
 ```
 
-###Loading Features Dynamically
+###Loading Features & Criteria
 ```javascript
 // Load Features Syncronously
-var getFeatures = function() {
+var getFeaturesSync = function() {
   //define mongodb client
   //load from mongodb client
   return X.call(query);

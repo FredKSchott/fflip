@@ -2,7 +2,7 @@
 	"name": "fflip",
   "description": "Highly Customizable & Über Powerful Feature Flipping",
   "author": "Fred Schott <fredkschott@gmail.com>",
-  "version": "0.2.0",  
+  "version": "0.2.1",  
   "main":"fflip",
   "repository" : { 
     "type" : "git",
@@ -11,6 +11,6 @@
   "licence": "MIT",  
   "keywords": ["feature", "flip", "flipping", "flipper", "togggle", "toggling", "toggler", "criteria"],
   //homepage
-  //bugs
+  "bugs": "https://github.com/FredKSchott/fflip/issues"
   //dependencies
 }

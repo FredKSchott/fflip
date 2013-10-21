@@ -11,13 +11,14 @@ var features = {},
     criteria = {},
     getFeatures,
     getCriteria,
-    refreshRate = false,
+    refreshRate = 30*1000,
     refreshIntrval;
 
 function setCriteria(params) {
     if(params.criteria instanceof Function) {
         getCriteria = params.criteria;
     } else {
+        criteria = params.criteria || criteria;
         getCriteria = undefined;
     }
     updateCriteria();
@@ -27,6 +28,7 @@ function setFeatures(params) {
     if(params.features instanceof Function) {
         getFeatures = params.features;
     } else {
+        features = params.features || features;
         getFeatures = undefined;
     }
     updateFeatures();
@@ -78,7 +80,7 @@ var self = module.exports = {
 
         // Refresh Rate
         refreshRate = params.reload*1000 || refreshRate;
-        if(refreshRate)
+        if(getCriteria || getFeatures)
             refreshIntrval = setInterval(self.reload, refreshRate);
         else
             clearInterval(refreshIntrval);

@@ -1,7 +1,7 @@
-![icon](http://fredkschott.com/images/fflipIcon.png) fflip
+<img src="http://fredkschott.com/images/fflipIcon2.png" /> fflip
 ============================
 
-Working on an experimental new design? Starting a closed beta? Rolling out a new feature over the next few weeks? Fa-fa-fa-flip it! __fflip__ gives you complete control over releasing new functionality to your users, based on thier user id, join date, paid status, and whatever else you can think of. __fflip's__ goal is to be the most extendable and customizable feature flipping/toggling module out there.
+Working on an experimental new design? Starting a closed beta? Rolling out a new feature over the next few weeks? Fa-fa-fa-flip it! __fflip__ gives you complete control over releasing new functionality to your users, based on thier user id, join date, membership status, and whatever else you can think of. __fflip's__ goal is to be the most extendable and customizable feature flipping/toggling module out there.
 
 - Create a list of criteria to test your users against
 - Describe features as a list of criteria, using easy-to-read json
@@ -34,7 +34,7 @@ var ExampleCriteria = {
 ```
 
 ###Features
-Features are sets of criteria to test users against. A user will have a featured enabled if they match all listed criteria, otherwise the feature is disabled. Features are described as follows:
+Features are sets of criteria to test users against. The value associated with the criteria is passed in as the data argument of the criteria function. A user will have a featured enabled if they match all listed criteria, otherwise the feature is disabled. Features are described as follows:
 ```javascript
 var ExampleFeatures = {
   paidFeature: {
@@ -50,7 +50,14 @@ var ExampleFeatures = {
 }
 ```
 
-###Basic Usage
+##Usage
+```
+Object featuresForUser(user)             // Return object of true/false for all features for user
+Bool   userHasFeature(user, featureName) // Return true/false for if featureName enabled for user
+       config(options)                   // Configure fflip (see below)
+```
+
+Below is a simple example of using fflip:
 ```javascript
 // Include fflip
 var fflip = require('fflip');
@@ -75,7 +82,7 @@ if(Features.closedBeta) {
 }
 ```
 
-##Configuration
+###Configuration
 ```javascript
 fflip.config({
   criteria: {}, // Object (see above) or Function (see below)
@@ -83,8 +90,6 @@ fflip.config({
   reload: 30,   // Time between refreshing features/criteria, in seconds
 });
 ```
-
-##Advanced Usage
 
 ###Extending Your User Object
 ```javascript
@@ -103,7 +108,7 @@ if(paidUser.hasFeature('newFeatureRollout')) {
 ```
 
 ###Features & Criteria Functions
-__fflip__ also accepts functions for loading criteria and features. If __fflip__ is passed a funciton with no arguments it will call the function and accept the return value. To load asyncronously, pass a function that sends a features/criteria data object to a callback. __fflip__ will recieve the callback and set the object accordingly. Set the reload option to refresh the data every X seconds by calling these functions.
+__fflip__ also accepts functions for loading criteria and features. If __fflip__ is passed a funciton with no arguments it will call the function and accept the return value. To load asyncronously, pass a function that sends a features/criteria data object to a callback. __fflip__ will recieve the callback and set the data accordingly. Set the reload option to call these functions and refresh the data every X seconds.
 ```javascript
 // Load Features Syncronously
 var getCriteriaSync = function() {
@@ -131,4 +136,4 @@ fflip.config({
 ```
 
 ##Special Thanks
-<a href="http://thenounproject.com/noun/switch/#icon-No3361" target="_blank">Switch</a> designed by <a href="http://thenounproject.com/schillidog" target="_blank">Rob Schill</a> from The Noun Project
+<a href="http://thenounproject.com/noun/switch/#icon-No20729" target="_blank">Switch</a> designed by <a href="http://thenounproject.com/Luboš Volkov" target="_blank">Luboš Volkov</a> from The Noun Project

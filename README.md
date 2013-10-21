@@ -49,6 +49,15 @@ var ExampleFeatures = {
 }
 ```
 
+##Options
+```javascript
+fflip.config({
+  criteria: {}, // Required. Pass an Object or Function (see below)
+  features: {}, // Required. Pass an Object or Function (see below)
+  reload: 30,   // Time between refreshing features/criteria, in seconds
+});
+```
+
 ##Usage
 Below is a simple example:
 ```javascript
@@ -91,21 +100,33 @@ if(paidUser.hasFeature('newFeatureRollout')) {
 }
 ```
 
-###Loading Features & Criteria
+###Refreshing Features & Criteria
+__fflip__ also accepts functions for loading criteria and features. If __fflip__ is passed a funciton with no arguments it will call the function and accept the return value. To load asyncronously, pass a function that sends a features/criteria data object to a callback. __fflip__ will recieve the callback and set the object accordingly. Set the reload option to refresh the data every X seconds by calling these functions.
 ```javascript
 // Load Features Syncronously
-var getFeaturesSync = function() {
-  //define mongodb client
-  //load from mongodb client
-  return X.call(query);
+var getCriteriaSync = function() {
+  var collection = db.collection('criteria');
+  var criteriaArr = collection.find().toArray();
+  //Proccess criteriaArr -> criteriaObj (format described above)
+  return criteriaObj;
 }
 
 // Load Features Asyncronously
-var getFeaturesAsync = function(callback) {
-  //define mongodb client
-  //load from mongodb client
-  client.loadFromDB(query, callback);
+var getFeaturesAsync = function(fflip_callback) {
+  var collection = db.collection('features');
+  collection.find().toArray(function(err, featuresArr) {
+    //Handle err
+    //Proccess featuresArr -> featuresObj (format described above)
+    fflip_callback(featuresObj);
+  });      
 }
+
+// Configure using variables defined above
+fflip.config({
+  criteria: getCriteriaSync,
+  features: getFeaturesAsync,
+  reload: 60
+});
 ```
 
 ##Special Thanks

@@ -14,6 +14,24 @@ var features = {},
     refreshRate = false,
     refreshIntrval;
 
+function setCriteria(params) {
+    if(params.criteria instanceof Function) {
+        getCriteria = params.criteria;
+    } else {
+        getCriteria = undefined;
+    }
+    updateCriteria();
+}
+
+function setFeatures(params) {
+    if(params.features instanceof Function) {
+        getFeatures = params.features;
+    } else {
+        getFeatures = undefined;
+    }
+    updateFeatures();
+}
+
 function updateCriteria() {
     if(!getCriteria) {
         return;
@@ -42,30 +60,10 @@ function updateFeatures() {
     }
 }
 
-function setCriteria(params) {
-    if(params.criteria instanceof Function) {
-        getCriteria = params.criteria;
-    } else {
-        getCriteria = undefined;
-    }
-    updateCriteria();
-}
-
-function setFeatures(params) {
-    if(params.features instanceof Function) {
-        getFeatures = params.features;
-    } else {
-        getFeatures = undefined;
-    }
-    updateFeatures();
-}
-
-function getFeaturesCallback(err, data) {
-    if(err) throw err;
+function getFeaturesCallback(data) {
     features = data || features;
 }
-function getCriteriaCallback(err, data) {
-    if(err) throw err;
+function getCriteriaCallback(data) {
     features = data || features;
 }
 

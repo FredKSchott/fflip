@@ -8,12 +8,29 @@ Working on an experimental new design? Starting a closed beta? Rolling out a new
 - Write it all to file, or load it Syncronous/Asyncronous from a database
 - \*Everything\*-Agnostic: Supports any database, user representation or framework you can throw at it 
 
-Install with:
+#####Install with:
 ```
 npm install fflip
 ```
 
 ##Getting Started
+Below is a simple example of using __fflip__ to deliver features to a subset of users:
+```javascript
+// Include fflip
+var fflip = require('fflip');
+
+fflip.config({
+  criteria: ExampleCriteria, // defined below
+  features: ExampleFeatures  // defined below
+});
+
+// Get a User's Enabled Features
+var Features = fflip.featuresForUser(someFreeUser);
+if(Features.closedBeta) {
+  console.log('Welcome to the Closed Beta!');
+}
+```
+
 ###Criteria
 Criteria are the rules that features can test users against. Each rule takes a user and a data argument to test against, and returns true/false if the user matches that criteria. The data argument can be any type, as long as you handle it correctly in the function you describe.
 ```javascript
@@ -57,32 +74,7 @@ Bool   userHasFeature(user, featureName) // Return true/false for if featureName
        config(options)                   // Configure fflip (see below)
 ```
 
-Below is a simple example of using fflip:
-```javascript
-// Include fflip
-var fflip = require('fflip');
-
-// Configure using variables defined above
-fflip.config({
-  criteria: ExampleCriteria,
-  features: ExampleFeatures
-});
-
-// Define a Test User
-var freeUser = {
-  id: 80,
-  isPaid: false,
-  /* ... */
-};
-
-// Get a User's Enabled Features
-var Features = fflip.featuresForUser(freeUser);
-if(Features.closedBeta) {
-  console.log('Welcome to the Closed Beta!');
-}
-```
-
-###Configuration
+Configure __fflip__ using any of the following options:
 ```javascript
 fflip.config({
   criteria: {}, // Object (see above) or Function (see below)
@@ -91,23 +83,7 @@ fflip.config({
 });
 ```
 
-###Extending Your User Object
-```javascript
-// Add a hasFeature() method to your User
-var paidUser = {
-  id: 30,
-  isPaid: false,
-  hasFeature: function(feature) { return fflip.userHasFeature(paidUser, feature); },
-  /* ... */
-};
-
-// Test Specific User Features
-if(paidUser.hasFeature('newFeatureRollout')) {
-  /* Do Some newFeauture Behavior... */
-}
-```
-
-###Features & Criteria Functions
+###Loading Features & Criteria Dynamically
 __fflip__ also accepts functions for loading criteria and features. If __fflip__ is passed a funciton with no arguments it will call the function and accept the return value. To load asyncronously, pass a function that sends a features/criteria data object to a callback. __fflip__ will recieve the callback and set the data accordingly. Set the reload option to call these functions and refresh the data every X seconds.
 ```javascript
 // Load Features Syncronously

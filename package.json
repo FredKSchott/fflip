@@ -7,10 +7,8 @@
   "repository" : { 
     "type" : "git",
     "url" : "http://github.com/FredKSchott/fflip"
-  }
+  },
   "licence": "MIT",  
   "keywords": ["feature", "flip", "flipping", "flipper", "togggle", "toggling", "toggler", "criteria"],
-  //homepage
   "bugs": "https://github.com/FredKSchott/fflip/issues"
-  //dependencies
 }

@@ -1,11 +1,12 @@
 ![icon](fflipIcon.png) fflip
 ============================
 
-Working on a secret new toolbar? Starting a closed Beta? Rolling out a new feature over the next few weeks? Fa-fa-fa-flip it! __fflip__ gives you complete control over releasing new functionality to your users, based on thier user id, join date, paid status, and whatever else you can think of. __fflip's__ goal is to be the most extendable feature flipping/toggling module out there, with a focus on both large and small teams.
+Working on an experimental new design? Starting a closed beta? Rolling out a new feature over the next few weeks? Fa-fa-fa-flip it! __fflip__ gives you complete control over releasing new functionality to your users, based on thier user id, join date, paid status, and whatever else you can think of. __fflip's__ goal is to be the most extendable and customizable feature flipping/toggling module out there.
 
-- Create a list of criteria for features to test user against, based on whatever user properties you have
-- Abstract them away, describe features verbally using easy-to-read json
-- Store your data in a file, or grab it from a database. Supports Syncronous & Asyncronous loading of new features & criteria.
+- Create a list of criteria to test your users against
+- Describe features as a list of criteria, using easy-to-read json
+- Write it all to file, or load it Syncronous/Asyncronous from a database
+- \*Everything\*-Agnostic: Supports any database, user representation or framework you can throw at it 
 
 Install with:
 ```
@@ -14,7 +15,7 @@ npm install fflip
 
 ##Getting Started
 ###Criteria
-Criteria are the rules that features can test users against. Each rule takes a user and an data argument to test the user against, and returns true/false if the user matches that criteria. The data argument can be any type, as long as you handle it correctly in the function you describe.
+Criteria are the rules that features can test users against. Each rule takes a user and a data argument to test against, and returns true/false if the user matches that criteria. The data argument can be any type, as long as you handle it correctly in the function you describe.
 ```javascript
 var ExampleCriteria = {    
   isPaidUser: function(user, isPaid) {
@@ -33,7 +34,7 @@ var ExampleCriteria = {
 ```
 
 ###Features
-Features are sets of criteria to test users against. A user has a featured enabled if they match all listed criteria, otherwise the feature is disabled. Features are described as follows:
+Features are sets of criteria to test users against. A user will have a featured enabled if they match all listed criteria, otherwise the feature is disabled. Features are described as follows:
 ```javascript
 var ExampleFeatures = {
   paidFeature: {
@@ -49,7 +50,7 @@ var ExampleFeatures = {
 }
 ```
 
-###Simple Example
+###Testing Users
 ```javascript
 // Include fflip
 var fflip = require('fflip');
@@ -74,7 +75,7 @@ if(Features.closedBeta) {
 }
 ```
 
-##Options
+##Configuration
 ```javascript
 fflip.config({
   criteria: {}, // Object (see above) or Function (see below)
@@ -101,14 +102,14 @@ if(paidUser.hasFeature('newFeatureRollout')) {
 }
 ```
 
-###Refreshing Features & Criteria
+###Dynamic Features & Criteria
 __fflip__ also accepts functions for loading criteria and features. If __fflip__ is passed a funciton with no arguments it will call the function and accept the return value. To load asyncronously, pass a function that sends a features/criteria data object to a callback. __fflip__ will recieve the callback and set the object accordingly. Set the reload option to refresh the data every X seconds by calling these functions.
 ```javascript
 // Load Features Syncronously
 var getCriteriaSync = function() {
   var collection = db.collection('criteria');
   var criteriaArr = collection.find().toArray();
-  //Proccess criteriaArr -> criteriaObj (format described above)
+  /* Proccess criteriaArr -> criteriaObj (format described above) */
   return criteriaObj;
 }
 
@@ -116,17 +117,17 @@ var getCriteriaSync = function() {
 var getFeaturesAsync = function(fflip_callback) {
   var collection = db.collection('features');
   collection.find().toArray(function(err, featuresArr) {
-    //Handle err
-    //Proccess featuresArr -> featuresObj (format described above)
+    /* Handle err
+     * Proccess featuresArr -> featuresObj (format described above) */
     fflip_callback(featuresObj);
   });      
 }
 
-// Configure using variables defined above
+// Configure fflip
 fflip.config({
   criteria: getCriteriaSync,
   features: getFeaturesAsync,
-  reload: 60
+  reload: 60 /* Call each function again every 60 secondss */
 });
 ```
 

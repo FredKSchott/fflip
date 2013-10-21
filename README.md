@@ -102,7 +102,7 @@ if(paidUser.hasFeature('newFeatureRollout')) {
 }
 ```
 
-###Dynamic Features & Criteria
+###Features & Criteria Functions
 __fflip__ also accepts functions for loading criteria and features. If __fflip__ is passed a funciton with no arguments it will call the function and accept the return value. To load asyncronously, pass a function that sends a features/criteria data object to a callback. __fflip__ will recieve the callback and set the object accordingly. Set the reload option to refresh the data every X seconds by calling these functions.
 ```javascript
 // Load Features Syncronously
@@ -123,11 +123,10 @@ var getFeaturesAsync = function(fflip_callback) {
   });      
 }
 
-// Configure fflip
 fflip.config({
   criteria: getCriteriaSync,
   features: getFeaturesAsync,
-  reload: 60 /* Call each function again every 60 secondss */
+  reload: 60 /* Call each function again and update features every 60 secondss */
 });
 ```
 

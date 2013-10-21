@@ -49,17 +49,7 @@ var ExampleFeatures = {
 }
 ```
 
-##Options
-```javascript
-fflip.config({
-  criteria: {}, // Required. Pass an Object or Function (see below)
-  features: {}, // Required. Pass an Object or Function (see below)
-  reload: 30,   // Time between refreshing features/criteria, in seconds
-});
-```
-
-##Usage
-Below is a simple example:
+###Simple Example
 ```javascript
 // Include fflip
 var fflip = require('fflip');
@@ -83,6 +73,17 @@ if(Features.closedBeta) {
   console.log('Welcome to the Closed Beta!');
 }
 ```
+
+##Options
+```javascript
+fflip.config({
+  criteria: {}, // Object (see above) or Function (see below)
+  features: {}, // Object or Function
+  reload: 30,   // Time between refreshing features/criteria, in seconds
+});
+```
+
+##Advanced Usage
 
 ###Extending Your User Object
 ```javascript

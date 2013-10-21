@@ -1,4 +1,4 @@
-![icon](fflipIcon.png) fflip
+![icon](http://fredkschott.com/images/fflipIcon.png) fflip
 ============================
 
 Working on an experimental new design? Starting a closed beta? Rolling out a new feature over the next few weeks? Fa-fa-fa-flip it! __fflip__ gives you complete control over releasing new functionality to your users, based on thier user id, join date, paid status, and whatever else you can think of. __fflip's__ goal is to be the most extendable and customizable feature flipping/toggling module out there.

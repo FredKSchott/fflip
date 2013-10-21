@@ -50,7 +50,7 @@ var ExampleFeatures = {
 }
 ```
 
-###Testing Users
+###Basic Usage
 ```javascript
 // Include fflip
 var fflip = require('fflip');
@@ -68,7 +68,7 @@ var freeUser = {
   /* ... */
 };
 
-// Get All of a User's Enabled Features
+// Get a User's Enabled Features
 var Features = fflip.featuresForUser(freeUser);
 if(Features.closedBeta) {
   console.log('Welcome to the Closed Beta!');

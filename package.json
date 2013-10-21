@@ -2,7 +2,7 @@
 	"name": "fflip",
   "description": "Highly Customizable & Über Powerful Feature Flipping",
   "author": "Fred Schott <fredkschott@gmail.com>",
-  "version": "0.2.1",  
+  "version": "0.2.2",  
   "main":"fflip",
   "repository" : { 
     "type" : "git",

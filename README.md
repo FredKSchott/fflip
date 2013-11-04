@@ -5,7 +5,7 @@ Working on an experimental new design? Starting a closed beta? Rolling out a new
 
 - Create a list of criteria to test your users against
 - Describe features as a list of criteria, using easy-to-read json
-- Write it all to file, or load it Syncronous/Asyncronous from a database
+- Load it Syncronous/Asyncronous from a database or simple JSON
 - \*Everything\*-Agnostic: Supports any database, user representation or framework you can throw at it 
 
 Install with:

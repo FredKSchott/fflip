@@ -72,7 +72,8 @@ var ExampleFeaturesObject = {
 ```
 Object featuresForUser(user)             // Return object of true/false for all features for user
 Bool   userHasFeature(user, featureName) // Return true/false if featureName is enabled for user
-       config(options)                   // Configure fflip (see below)
+void   config(options)                   // Configure fflip (see below)
+void   reload()                          // Force a reload of criteria/features
 ```
 
 Configure __fflip__ using any of the following options:

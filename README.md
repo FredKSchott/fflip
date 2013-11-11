@@ -4,9 +4,9 @@
 Working on an experimental new design? Starting a closed beta? Rolling out a new feature over the next few weeks? Fa-fa-fa-flip it! __fflip__ gives you complete control over releasing new functionality to your users based on thier user id, join date, membership status, and whatever else you can think of. __fflip's__ goal is to be the most extendable and customizable feature flipping/toggling module out there.
 
 - Create a list of criteria to test your users against
-- Describe features as a list of criteria, using easy-to-read json
-- Load it Syncronous/Asyncronous from a database or simple JSON
-- \*Everything\*-Agnostic: Supports any database, user representation or framework you can throw at it 
+- Describe features using easy-to-read JSON
+- Supports Syncronous/Asyncronous loading of features and criteria
+- \*Everything\*-Agnostic: Supports any database, user representation or framework you can throw at it
 
 Install with:
 ```
@@ -21,8 +21,8 @@ Below is a simple example of using __fflip__ to deliver a closed beta to a fract
 var fflip = require('fflip');
 
 fflip.config({
-  criteria: ExampleCriteria, // defined below
-  features: ExampleFeatures  // defined below
+  criteria: ExampleCriteriaObject, // defined below
+  features: ExampleFeaturesObject  // defined below
 });
 
 // Get a User's Enabled Features
@@ -35,7 +35,7 @@ if(Features.closedBeta) {
 ###Criteria
 Criteria are the rules that features can test users against. Each rule takes a user and a data argument to test against, and returns true/false if the user matches that criteria. The data argument can be any type, as long as you handle it correctly in the function you describe.
 ```javascript
-var ExampleCriteria = {    
+var ExampleCriteriaObject = {
   isPaidUser: function(user, isPaid) {
     return user.isPaid == isPaid;
   },
@@ -54,7 +54,7 @@ var ExampleCriteria = {
 ###Features
 Features are sets of criteria to test users against. The value associated with the criteria is passed in as the data argument of the criteria function. A user will have a featured enabled if they match all listed criteria, otherwise the feature is disabled. Features are described as follows:
 ```javascript
-var ExampleFeatures = {
+var ExampleFeaturesObject = {
   paidFeature: {
     isPaidUser: true
   },
@@ -102,7 +102,7 @@ var getFeaturesAsync = function(fflip_callback) {
     /* Handle err
      * Proccess featuresArr -> featuresObj (format described above) */
     fflip_callback(featuresObj);
-  });      
+  });
 }
 
 fflip.config({

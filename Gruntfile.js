@@ -4,9 +4,16 @@ module.exports = function(grunt) {
 
   grunt.initConfig({
     mochaTest: {
-      test: {
+      nyan: {
         options: {
           reporter: 'nyan',
+          ui: 'tdd'
+        },
+        src: ['test/fflip.js']
+      },
+      spec: {
+        options: {
+          reporter: 'spec',
           ui: 'tdd'
         },
         src: ['test/fflip.js']
@@ -14,6 +21,7 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.registerTask('test', 'mochaTest');
+  grunt.registerTask('test', 'mochaTest:nyan');
+  grunt.registerTask('travis', 'mochaTest:spec');
 
 };

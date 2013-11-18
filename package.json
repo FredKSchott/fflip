@@ -11,7 +11,7 @@
   },
   "bugs": "https://github.com/FredKSchott/fflip/issues",
   "scripts": {
-    "test": "grunt test --verbose"
+    "test": "grunt travis --verbose"
   },
   "devDependencies": {
     "grunt": "~0.4.1",

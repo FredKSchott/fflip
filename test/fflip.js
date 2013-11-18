@@ -3,24 +3,24 @@ var fflip = require('../lib/fflip');
 
 var configData = {
   criteria: {
-      c1: function(user, bool) {
-        return bool;
-      },
-      c2: function(user, flag) {
-        return user.flag == flag;
-      }
+    c1: function(user, bool) {
+      return bool;
+    },
+    c2: function(user, flag) {
+      return user.flag == flag;
+    }
   },
   features: {
-      fEmpty: {},
-      fOpen: {
-        c1: true
-      },
-      fClosed: {
-        c1: false
-      },
-      fEval: {
-        c2: 'abc'
-      }
+    fEmpty: {},
+    fOpen: {
+      c1: true
+    },
+    fClosed: {
+      c1: false
+    },
+    fEval: {
+      c2: 'abc'
+    }
   },
   reload: 0
 };

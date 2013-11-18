@@ -3,7 +3,7 @@
   "description": "Highly Customizable & Über Powerful Feature Flipping",
   "author": "Fred Schott <fredkschott@gmail.com>",
   "licence": "MIT",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "main": "lib/fflip",
   "repository": {
     "type": "git",
@@ -25,6 +25,8 @@
     "togggle",
     "toggling",
     "toggler",
-    "criteria"
+    "criteria",
+    "continuous integration",
+    "ci"
   ]
 }

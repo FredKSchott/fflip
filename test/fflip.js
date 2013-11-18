@@ -1,4 +1,7 @@
-var assert = require('assert');
+var assert = require('assert'),
+    sinon = require('sinon');
+var request = require('supertest')('http://localhost:5555');
+
 var fflip = require('../lib/fflip');
 
 var configData = {
@@ -165,18 +168,115 @@ suite('fflip', function(){
 
     test('should return an object of features for a user', function(){
       var featuresABC = fflip.featuresForUser(userABC);
-      var featuresXYZ = fflip.featuresForUser(userXYZ);
       assert.equal(featuresABC.fEmpty, false);
       assert.equal(featuresABC.fOpen, true);
       assert.equal(featuresABC.fClosed, false);
-      assert.equal(featuresABC.fEval, true);      
-      assert.equal(featuresXYZ.fEmpty, false);
-      assert.equal(featuresXYZ.fOpen, true);
-      assert.equal(featuresXYZ.fClosed, false);
+      assert.equal(featuresABC.fEval, true);
+    });
+
+    test('should overwrite values when flags are set', function() {
+      var featuresXYZ = fflip.featuresForUser(userXYZ);
       assert.equal(featuresXYZ.fEval, false);
+      featuresXYZ = fflip.featuresForUser(userXYZ, {fEval: true});
+      assert.equal(featuresXYZ.fEval, true);
     });
 
   });
 
+  suite('express middleware', function(){
+
+    setup(function() {
+      this.reqMock = {
+        cookies: {
+          fflip: {
+            fClosed: false
+          }
+        }
+      };
+      this.renderOriginal = sinon.spy();
+      this.resMock = {
+        render: this.renderOriginal
+      };
+    });
+
+    test('should set fflip object onto req', function(done) {
+      var me = this;
+      fflip._express_middleware(this.reqMock, this.resMock, function() {
+        assert(me.reqMock.fflip);
+        assert(me.reqMock.fflip.flags, me.reqMock.cookies.fflip);
+        done();
+      });
+    });
+
+    test('should wrap res.render() to set features automatically', function(done) {
+      var me = this;
+      fflip._express_middleware(this.reqMock, this.resMock, function() {
+        me.reqMock.fflip = {features : { fClosed: true }};
+        me.resMock.render('testview', {});
+        assert(me.renderOriginal.calledOnce);
+        var featuresString = JSON.stringify(me.reqMock.fflip.features);
+        assert(me.renderOriginal.calledWith('testview', {Features: featuresString}));
+        done();
+      });
+    });
+
+    test('req.fflip.setFeatures() should call featuresForUser() with cookie flags', function(done) {
+      var me = this;
+      var spy = sinon.spy(fflip, 'featuresForUser');
+      fflip._express_middleware(this.reqMock, this.resMock, function() {
+        me.reqMock.fflip.setFeatures(userXYZ);
+        assert(fflip.featuresForUser.calledOnce);
+        assert(fflip.featuresForUser.calledWith(userXYZ, {fClosed: false}));
+        spy.restore();
+        done();
+      });
+    });
+    
+    test('req.fflip.setFeatures() should set results to req.fflip.features', function(done) {
+      var me = this;
+      var stub = sinon.stub(fflip, 'featuresForUser').returns('newfeatures');
+      fflip._express_middleware(this.reqMock, this.resMock, function() {
+        me.reqMock.fflip.setFeatures(userXYZ);
+        assert.equal(me.reqMock.fflip.features, 'newfeatures');
+        stub.restore();
+        done();
+      });
+    });
+
+  });
+
+  // suite('express route', function(){
+
+  //   setup(function() {
+
+  //   });
+    
+  //   test('should return a 404 error if feature does not exist', function(done) {
+  //     request.get('/fflip/doesnotexist/1').expect(404, function(err){
+  //       if(err) done(err);
+  //       done();
+  //     });
+  //   });
+    
+  //   test('should return a 400 error if action is invalid', function() {
+  //     request.get('/fflip/fOpen/5').expect(400, function(err){
+  //       if(err) done(err);
+  //       done();
+  //     });
+  //   });
+    
+  //   test('should return a 200 sucess if request was valid', function() {
+  //     request.get('/fflip/fOpen/1').expect(400, function(err){
+  //       if(err) done(err);
+  //       done();
+  //     });
+  //   });
+
+  //   test('should call res.cookie() on successful request', function() {
+  //     self._express_route(this.reqMock, this.resMock);
+  //     assert(res.cookie.calledWith('fflip'));
+  //   });
+
+  // });
 
 });

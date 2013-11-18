@@ -2,13 +2,21 @@
   "name": "fflip",
   "description": "Highly Customizable & Über Powerful Feature Flipping",
   "author": "Fred Schott <fredkschott@gmail.com>",
-  "version": "0.3.1",
+  "licence": "MIT",
+  "version": "0.3.2",
   "main": "lib/fflip",
   "repository": {
     "type": "git",
     "url": "http://github.com/FredKSchott/fflip"
   },
-  "licence": "MIT",
+  "bugs": "https://github.com/FredKSchott/fflip/issues",
+  "scripts": {
+    "test": "grunt test --verbose"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-mocha-test": "~0.7.0"
+  },
   "keywords": [
     "feature",
     "flip",
@@ -18,10 +26,5 @@
     "toggling",
     "toggler",
     "criteria"
-  ],
-  "bugs": "https://github.com/FredKSchott/fflip/issues",
-  "devDependencies": {
-    "grunt": "~0.4.1",
-    "grunt-mocha-test": "~0.7.0"
-  }
+  ]
 }

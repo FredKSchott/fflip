@@ -14,7 +14,7 @@ npm install fflip --save
 ```
 
 ##Getting Started
-Below is a simple example of using __fflip__ to deliver a closed beta to a fraction of users:
+Below is a simple example that uses __fflip__ to deliver a closed beta to a fraction of users:
 ```javascript
 // Include fflip
 var fflip = require('fflip');
@@ -113,14 +113,25 @@ fflip.config({
 });
 ```
 
-###Express Support
-__fflip__ can be easily integrated with Express a popular web framework. Connecting the two provides the following functionality:
 
-__A route for manually flipping on/off features__  
-If you have cookies enabled, you can visit ``/fflip/:name/:action`` to manually override a feature's criteria and return true/false for your own session. Just replace ':name' with the Feature name and ':action' with 1 to enable, 0 to disable, or -1 to reset (remove the cookie override).
+##Express Support
+__fflip__ provides easy integration with the popular web framework [Express](https://github.com/visionmedia/express). Connecting the two provides the following functionality:
 
-- ``req.fflip`` to store all fflip information for a given request
-- If ``req.fflip.setFeatures() ``has been called, ``res.render()`` will automatically include it as template variable ``Features``
+####__A route for manually flipping on/off features__  
+If you have cookies enabled, you can visit ``/fflip/:name/:action`` to manually override a feature to always return true/false for your own session. Just replace ':name' with the Feature name and ':action' with 1 to enable, 0 to disable, or -1 to reset (remove the cookie override). This override is stored in the user's cookie.
+
+####__req.fflip__  
+A __fflip__ object is attached to the request, and includes the following funciontality:
+```
+req.fflip = {
+  flags: Any override flags set by the fflip cookie
+  features: The features object returned by featuresForUser(). Undefined until setFeatures() is called.
+  setFeatures(user): Given a user, attaches the features object to the request (at req.fflip.features) 
+}
+```
+
+####__Automatically include features in your client-side javascript__  
+The __fflip__ Express middleware wraps res.render() to always the req.fflip.features object as a  ``Features`` template variable. To deliver this down to the client, just make sure your template contains the code ``<script>var Features = <%= Features %></script>``.
 
 
 ##Special Thanks

@@ -5,7 +5,6 @@
 Working on an experimental new design? Starting a closed beta? Rolling out a new feature over the next few weeks? Fa-fa-fa-flip it! __fflip__ gives you complete control over releasing new functionality to your users based on thier user id, join date, membership status, and whatever else you can think of. __fflip's__ goal is to be the most extendable and customizable feature flipping/toggling module out there.
 
 - Describes __custom criteria and features__ using easy-to-read JSON
-- Supports __Syncronous/Asyncronous loading__ of features and criteria
 - Delivers features down to the client for __client-side feature flipping__
 - Includes __Express Middleware__ for easy integration with Express applications  
 - __Everything-Agnostic:__ Supports any database, user representation or framework you can throw at it

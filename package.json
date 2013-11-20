@@ -3,7 +3,7 @@
   "description": "Highly Customizable & Über Powerful Feature Flipping",
   "author": "Fred Schott <fredkschott@gmail.com>",
   "licence": "MIT",
-  "version": "0.3.3",
+  "version": "0.4.0",
   "main": "lib/fflip",
   "repository": {
     "type": "git",
@@ -15,17 +15,18 @@
   },
   "devDependencies": {
     "grunt": "~0.4.1",
-    "grunt-mocha-test": "~0.7.0"
+    "grunt-mocha-test": "~0.7.0",
+    "supertest": "~0.8.1",
+    "sinon": "~1.7.3"
   },
   "keywords": [
+    "feature flipping",
+    "feature toggling",
     "feature",
     "flip",
-    "flipping",
     "flipper",
-    "togggle",
-    "toggling",
+    "toggle",
     "toggler",
-    "criteria",
     "continuous integration",
     "ci"
   ]

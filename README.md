@@ -4,17 +4,17 @@
 ============================ 
 Working on an experimental new design? Starting a closed beta? Rolling out a new feature over the next few weeks? Fa-fa-fa-flip it! __fflip__ gives you complete control over releasing new functionality to your users based on thier user id, join date, membership status, and whatever else you can think of. __fflip's__ goal is to be the most extendable and customizable feature flipping/toggling module out there.
 
-- Describe __custom criteria and features__ using easy-to-read JSON
-- Supports __Syncronous/Asyncronous loading__ of features and criteria
-- Deliver a features object to the client for __client-side feature flipping__
-- __\*Everything\*-Agnostic:__ Supports any database, user representation or framework you can throw at it
+- Describes __custom criteria and features__ using easy-to-read JSON
+- Delivers features down to the client for __client-side feature flipping__
+- Includes __Express Middleware__ for easy integration with Express applications  
+- __Everything-Agnostic:__ Supports any database, user representation or framework you can throw at it
 
 ```
 npm install fflip --save
 ```
 
 ##Getting Started
-Below is a simple example of using __fflip__ to deliver a closed beta to a fraction of users:
+Below is a simple example that uses __fflip__ to deliver a closed beta to a fraction of users:
 ```javascript
 // Include fflip
 var fflip = require('fflip');
@@ -69,10 +69,11 @@ var ExampleFeaturesObject = {
 
 ##Usage
 ```
+void   config(options)                   // Configure fflip (see below)
 Object featuresForUser(user)             // Return object of true/false for all features for user
 Bool   userHasFeature(user, featureName) // Return true/false if featureName is enabled for user
-void   config(options)                   // Configure fflip (see below)
 void   reload()                          // Force a reload of criteria/features
+void   __express(app)                    // Connect with
 ```
 
 Configure __fflip__ using any of the following options:
@@ -111,6 +112,26 @@ fflip.config({
   reload: 60 /* Call each function again and update features every 60 secondss */
 });
 ```
+
+
+##Express Support
+__fflip__ provides easy integration with the popular web framework [Express](https://github.com/visionmedia/express). Connecting the two provides the following functionality:
+
+####__A route for manually flipping on/off features__  
+If you have cookies enabled, you can visit ``/fflip/:name/:action`` to manually override a feature to always return true/false for your own session. Just replace ':name' with the Feature name and ':action' with 1 to enable, 0 to disable, or -1 to reset (remove the cookie override). This override is stored in the user's cookie.
+
+####__req.fflip__  
+A __fflip__ object is attached to the request, and includes the following funciontality:
+```
+req.fflip = {
+  flags: Any override flags set by the fflip cookie
+  features: The features object returned by featuresForUser(). Undefined until setFeatures() is called.
+  setFeatures(user): Given a user, attaches the features object to the request (at req.fflip.features) 
+}
+```
+
+####__Automatically include features in your client-side javascript__  
+The __fflip__ Express middleware wraps res.render() to always the req.fflip.features object as a  ``Features`` template variable. To deliver this down to the client, just make sure your template contains the code ``<script>var Features = <%= Features %></script>``.
 
 
 ##Special Thanks

@@ -73,7 +73,7 @@ void   config(options)                   // Configure fflip (see below)
 Object featuresForUser(user)             // Return object of true/false for all features for user
 Bool   userHasFeature(user, featureName) // Return true/false if featureName is enabled for user
 void   reload()                          // Force a reload of criteria/features
-void   __express(app)                    // Connect with
+void   __express(app)                    // Connect with an Express app (see below)
 ```
 
 Configure __fflip__ using any of the following options:

@@ -245,38 +245,70 @@ suite('fflip', function(){
 
   });
 
-  // suite('express route', function(){
+  suite('express route', function(){
 
-  //   setup(function() {
+    setup(function() {
+      this.reqMock = {
+        params: {
+          name: 'fClosed',
+          action: '1'
+        },
+        cookies: {}
+      };
+      this.resMock = {
+        json: sinon.spy(),
+        cookie: sinon.spy()
+      }
+    });
 
-  //   });
+    test('should return a 404 json object if feature does not exist', function() {
+      this.reqMock.params.name = 'doesnotexist';
+      fflip._express_route(this.reqMock, this.resMock);
+      assert(this.resMock.json.calledWith(404));
+    });
+
+    test('should return a 500 json object if cookies are not enabled', function() {
+      this.reqMock.cookies = null;
+      fflip._express_route(this.reqMock, this.resMock);
+      assert(this.resMock.json.calledWith(500));
+    });
+
+    test('should set the right cookie flags', function() {
+      fflip._express_route(this.reqMock, this.resMock);
+      assert(this.resMock.cookie.calledWithMatch('fflip', {fClosed: true}, { maxAge: 900000 }));
+    });
+
+    test('should send back 200 json response on successful call', function() {
+      fflip._express_route(this.reqMock, this.resMock);
+      assert(this.resMock.json.calledWith(200));
+    });
+
+    // test('should return a 404 error if feature does not exist', function(done) {
+    //   request.get('/fflip/doesnotexist/1').expect(404, function(err){
+    //     if(err) done(err);
+    //     done();
+    //   });
+    // });
     
-  //   test('should return a 404 error if feature does not exist', function(done) {
-  //     request.get('/fflip/doesnotexist/1').expect(404, function(err){
-  //       if(err) done(err);
-  //       done();
-  //     });
-  //   });
+    // test('should return a 400 error if action is invalid', function() {
+    //   request.get('/fflip/fOpen/5').expect(400, function(err){
+    //     if(err) done(err);
+    //     done();
+    //   });
+    // });
     
-  //   test('should return a 400 error if action is invalid', function() {
-  //     request.get('/fflip/fOpen/5').expect(400, function(err){
-  //       if(err) done(err);
-  //       done();
-  //     });
-  //   });
-    
-  //   test('should return a 200 sucess if request was valid', function() {
-  //     request.get('/fflip/fOpen/1').expect(400, function(err){
-  //       if(err) done(err);
-  //       done();
-  //     });
-  //   });
+    // test('should return a 200 sucess if request was valid', function() {
+    //   request.get('/fflip/fOpen/1').expect(400, function(err){
+    //     if(err) done(err);
+    //     done();
+    //   });
+    // });
 
-  //   test('should call res.cookie() on successful request', function() {
-  //     self._express_route(this.reqMock, this.resMock);
-  //     assert(res.cookie.calledWith('fflip'));
-  //   });
+    // test('should call res.cookie() on successful request', function() {
+    //   self._express_route(this.reqMock, this.resMock);
+    //   assert(res.cookie.calledWith('fflip'));
+    // });
 
-  // });
+  });
 
 });

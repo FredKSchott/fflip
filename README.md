@@ -7,8 +7,8 @@ Working on an experimental new design? Starting a closed beta? Rolling out a new
 - Describes __custom criteria and features__ using easy-to-read JSON
 - Supports __Syncronous/Asyncronous loading__ of features and criteria
 - Delivers features down to the client for __client-side feature flipping__
-- Connects with __Express__ for additional features 
-- __\*Everything\*-Agnostic:__ Supports any database, user representation or framework you can throw at it
+- Includes __Express Middleware__ for easy integration with Express applications  
+- __Everything-Agnostic:__ Supports any database, user representation or framework you can throw at it
 
 ```
 npm install fflip --save
@@ -70,10 +70,11 @@ var ExampleFeaturesObject = {
 
 ##Usage
 ```
+void   config(options)                   // Configure fflip (see below)
 Object featuresForUser(user)             // Return object of true/false for all features for user
 Bool   userHasFeature(user, featureName) // Return true/false if featureName is enabled for user
-void   config(options)                   // Configure fflip (see below)
 void   reload()                          // Force a reload of criteria/features
+void   __express(app)                    // Connect with
 ```
 
 Configure __fflip__ using any of the following options:
@@ -112,6 +113,15 @@ fflip.config({
   reload: 60 /* Call each function again and update features every 60 secondss */
 });
 ```
+
+###Express Support
+__fflip__ can be easily integrated with Express a popular web framework. Connecting the two provides the following functionality:
+
+__A route for manually flipping on/off features__  
+If you have cookies enabled, you can visit ``/fflip/:name/:action`` to manually override a feature's criteria and return true/false for your own session. Just replace ':name' with the Feature name and ':action' with 1 to enable, 0 to disable, or -1 to reset (remove the cookie override).
+
+- ``req.fflip`` to store all fflip information for a given request
+- If ``req.fflip.setFeatures() ``has been called, ``res.render()`` will automatically include it as template variable ``Features``
 
 
 ##Special Thanks

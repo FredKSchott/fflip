@@ -2,6 +2,8 @@
 
 <img src="http://fredkschott.com/images/fflipIcon2.png" /> fflip
 ============================ 
+__Follow [@FredKSchott](http://www.twitter.com/fredkschott) for development news and updates!__
+
 Working on an experimental new design? Starting a closed beta? Rolling out a new feature over the next few weeks? Fa-fa-fa-flip it! __fflip__ gives you complete control over releasing new functionality to your users based on thier user id, join date, membership status, and whatever else you can think of. __fflip's__ goal is to be the most extendable and customizable feature flipping/toggling module out there.
 
 - Describes __custom criteria and features__ using easy-to-read JSON
@@ -114,7 +116,7 @@ fflip.config({
 ```
 
 
-##Express Support
+##Express Integration
 __fflip__ provides easy integration with the popular web framework [Express](https://github.com/visionmedia/express). Connecting the two provides the following functionality:
 
 ####__A route for manually flipping on/off features__  

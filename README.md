@@ -122,7 +122,7 @@ __fflip__ provides easy integration with the popular web framework [Express](htt
 ####__A route for manually flipping on/off features__  
 If you have cookies enabled, you can visit ``/fflip/:name/:action`` to manually override a feature to always return true/false for your own session. Just replace ':name' with the Feature name and ':action' with 1 to enable, 0 to disable, or -1 to reset (remove the cookie override). This override is stored in the user's cookie.
 
-####__req.fflip__  
+####req.fflip
 A __fflip__ object is attached to the request, and includes the following funciontality:
 ```
 req.fflip = {
@@ -132,8 +132,9 @@ req.fflip = {
   hasFeature(featureName): Given a feature name, returns the feature boolean, or null if setFeatures() has't been called
 }
 ```
+To avoid polluting the request object, All fflip functionality is contained within req.fflip. But (If your implementation allows it) you can add aliases directly onto the request object.
 
-####__Automatically deliver Features to the client  
+####Automatically deliver Features to the client  
 The __fflip__ Express middleware wraps res.render() to always the req.fflip.features object as a  ``Features`` template variable. To deliver this down to the client, just make sure your template contains the code ``<script>var Features = <%= Features %></script>``.
 
 

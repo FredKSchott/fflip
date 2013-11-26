@@ -88,7 +88,7 @@ fflip.config({
 ```
 
 ###Loading Features & Criteria Dynamically
-__fflip__ also accepts functions for loading criteria and features. If __fflip__ is passed a funciton with no arguments it will call the function and accept the return value. To load asyncronously, pass a function that sends a features/criteria data object to a callback. __fflip__ will recieve the callback and set the data accordingly. Set the reload option to call these functions and refresh the data every X seconds.
+__fflip__ also accepts functions for loading criteria and features. If __fflip__ is passed a funciton with no arguments it will call the function and accept the return value. To load asyncronously, pass a function that sends a features/criteria data object to a callback. __fflip__ will recieve the callback and set the data accordingly. In both cases, __fflip__ will save these functions and call them again every X seconds, as set by the reload parameter.
 ```javascript
 // Load Criteria Syncronously
 var getCriteriaSync = function() {

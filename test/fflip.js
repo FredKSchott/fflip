@@ -35,6 +35,16 @@ var userXYZ = {
   flag: 'xyz'
 };
 
+var isObjectEmpty = function(obj) {
+  for(var key in obj) {
+    if(obj.hasOwnProperty(key)) {
+      return false;
+    }
+  }
+  return true;
+};
+
+
 
 suite('fflip', function(){
 
@@ -236,20 +246,32 @@ suite('fflip', function(){
       var me = this;
       fflip._express_middleware(this.reqMock, this.resMock, function() {
         me.reqMock.fflip.setFeatures(userXYZ);
-        assert.ok(me.reqMock.fflip.hasFeature('fOpen'));
-        assert.ok(!me.reqMock.fflip.hasFeature('fClosed'));
-        assert.equal(me.reqMock.fflip.hasFeature('notafeature'), undefined);
+        assert.strictEqual(me.reqMock.fflip.hasFeature('fOpen'), true);
+        assert.strictEqual(me.reqMock.fflip.hasFeature('fClosed'), false);
+        assert.strictEqual(me.reqMock.fflip.hasFeature('notafeature'), undefined);
         done();
       });
     });
 
     test('req.fflip.hasFeatures() should return null if features have not been set', function(done) {
       var me = this;
+      var consoleErrorStub = sinon.stub(console, 'error'); // Supress Error Output
       fflip._express_middleware(this.reqMock, this.resMock, function() {
-        assert.equal(me.reqMock.fflip.hasFeature('fOpen'), null);
-        assert.equal(me.reqMock.fflip.hasFeature('fClosed'), null);
-        assert.equal(me.reqMock.fflip.hasFeature('notafeature'), null);
+        assert.strictEqual(me.reqMock.fflip.hasFeature('fOpen'), null);
+        assert.strictEqual(me.reqMock.fflip.hasFeature('fClosed'), null);
+        assert.strictEqual(me.reqMock.fflip.hasFeature('notafeature'), null);
         done();
+        consoleErrorStub.restore();
+      });
+    });
+
+    test('req.fflip.featuers should be an empty object if setFeatures() has not been called', function(done) {
+      var me = this;
+      var consoleErrorStub = sinon.stub(console, 'error'); // Supress Error Output
+      fflip._express_middleware(this.reqMock, this.resMock, function() {
+        assert.ok(isObjectEmpty(me.reqMock.fflip.features));
+        done();
+        consoleErrorStub.restore();
       });
     });
 

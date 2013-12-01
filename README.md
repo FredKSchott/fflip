@@ -127,7 +127,7 @@ A __fflip__ object is attached to the request, and includes the following funcio
 ```
 req.fflip = {
   flags: Any override flags set by the fflip cookie
-  features: A user's fflip features object. Undefined until setFeatures() is called.
+  features: A user's fflip features object. Empty until setFeatures() is called.
   setFeatures(user): Given a user, attaches the features object to the request (at req.fflip.features)
   hasFeature(featureName): Given a feature name, returns the feature boolean, or null if setFeatures() has't been called
 }

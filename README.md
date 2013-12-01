@@ -117,7 +117,8 @@ fflip.config({
 
 
 ##Express Integration
-__fflip__ provides easy integration with the popular web framework [Express](https://github.com/visionmedia/express). Just call ``fflip.__express(app)`` wherever you set up your server to enable the following:
+__fflip__ provides easy integration with the popular web framework [Express](https://github.com/visionmedia/express).  
+Just call ``fflip.__express(app)`` wherever you set up your express application to enable the following:
 
 ####__A route for manually flipping on/off features__  
 If you have cookies enabled, you can visit ``/fflip/:name/:action`` to manually override a feature to always return true/false for your own session. Just replace ':name' with the Feature name and ':action' with 1 to enable, 0 to disable, or -1 to reset (remove the cookie override). This override is stored in the user's cookie.

@@ -129,7 +129,7 @@ req.fflip = {
   flags: Any override flags set by the fflip cookie
   features: A user's fflip features object. Empty until setFeatures() is called.
   setFeatures(user): Given a user, attaches the features object to the request (at req.fflip.features)
-  hasFeature(featureName): Given a feature name, returns the feature boolean, or null if setFeatures() has't been called
+  hasFeature(featureName): Given a feature name, returns the feature boolean, undefined if feature doesn't exist, or null if setFeatures() has't been called
 }
 ```
 To avoid polluting the request object, All fflip functionality is contained within req.fflip. But (If your implementation allows it) you can add aliases directly onto the request object.

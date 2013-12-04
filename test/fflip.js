@@ -14,18 +14,23 @@ var configData = {
     }
   },
   features: {
-    fEmpty: {
-      //default: true,
-      //description: "An Empty Feature Flip"
-    },
+    fEmpty: {},
     fOpen: {
-      c1: true
+      name: 'fOpen',
+      description: 'true for all users',
+      criteria: {
+        c1: true
+      }
     },
-    fClosed: {
-      c1: false
+    fClosed: { 
+      criteria: {
+        c1: false
+      }
     },
     fEval: {
-      c2: 'abc'
+      criteria: {
+        c2: 'abc'
+      }
     }
   },
   reload: 0
@@ -134,7 +139,7 @@ suite('fflip', function(){
       assert.equal(null, fflip.userHasFeature(userABC, 'notafeature'));
     });
 
-    test('should return false if features has no criteria', function(){
+    test('should return false if no criteria set', function(){
       assert.equal(false, fflip.userHasFeature(userABC, 'fEmpty'));
     });
 

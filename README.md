@@ -4,7 +4,7 @@
 ============================ 
 __Follow [@FredKSchott](http://www.twitter.com/fredkschott) for development news and updates!__
 
-Working on an experimental new design? Starting a closed beta? Rolling out a new feature over the next few weeks? Fa-fa-fa-flip it! __fflip__ gives you complete control over releasing new functionality to your users based on thier user id, join date, membership status, and whatever else you can think of. __fflip's__ goal is to be the most extendable and customizable feature flipping/toggling module out there.
+Working on an experimental new design? Starting a closed beta? Rolling out a new feature over the next few weeks? Fa-fa-fa-flip it! __fflip__ gives you complete control over releasing new functionality to your users based on thier user id, join date, membership status, and whatever else you can think of. __fflip's__ goal is to be the most powerful and extendable feature flipping/toggling module out there.
 
 - Describes __custom criteria and features__ using easy-to-read JSON
 - Delivers features down to the client for additional __client-side feature flipping__
@@ -45,7 +45,8 @@ var ExampleCriteriaObject = {
   },
   allowUserIDs: function(user, idArr) {
     for(var id in idArr) {
-      if(user.id == idArr[id]) return true;
+      if(user.id == idArr[id]) 
+        return true;
     }
     return false;
   }
@@ -129,10 +130,9 @@ req.fflip = {
   flags: Any override flags set by the fflip cookie
   features: A user's fflip features object. Empty until setFeatures() is called.
   setFeatures(user): Given a user, attaches the features object to the request (at req.fflip.features)
-  hasFeature(featureName): Given a feature name, returns the feature boolean, undefined if feature doesn't exist, or null if setFeatures() has't been called
+  has(featureName): Given a feature name, returns the feature boolean, undefined if feature doesn't exist, or null if setFeatures() has't been called
 }
 ```
-To avoid polluting the request object, All fflip functionality is contained within req.fflip. But (If your implementation allows it) you can add aliases directly onto the request object.
 
 ####Automatically deliver Features to the client  
 The __fflip__ Express middleware wraps res.render() to always the req.fflip.features object as a  ``Features`` template variable. To deliver this down to the client, just make sure your template contains the code ``<script>var Features = <%= Features %></script>``.

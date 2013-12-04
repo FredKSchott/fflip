@@ -1,14 +1,11 @@
 {
   "name": "fflip",
-  "description": "Highly Customizable & Über Powerful Feature Flipping",
+  "description": "Full-Stack Feature Flipping",
   "author": "Fred Schott <fredkschott@gmail.com>",
   "licence": "MIT",
   "version": "0.6.2",
   "main": "lib/fflip",
-  "repository": {
-    "type": "git",
-    "url": "http://github.com/FredKSchott/fflip"
-  },
+  "repository": "FredKSchott/fflip",
   "bugs": "https://github.com/FredKSchott/fflip/issues",
   "scripts": {
     "test": "grunt travis --verbose"
@@ -20,12 +17,11 @@
     "sinon": "~1.7.3"
   },
   "keywords": [
-    "feature flipping",
-    "feature toggling",
     "feature",
     "flip",
     "toggle",
-    "continuous integration",
-    "ci"
+    "feature flipping",
+    "feature toggling",
+    "continuous integration"
   ]
 }

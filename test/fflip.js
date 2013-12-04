@@ -14,7 +14,10 @@ var configData = {
     }
   },
   features: {
-    fEmpty: {},
+    fEmpty: {
+      //default: true,
+      //description: "An Empty Feature Flip"
+    },
     fOpen: {
       c1: true
     },
@@ -242,24 +245,24 @@ suite('fflip', function(){
       });
     });
 
-    test('req.fflip.hasFeatures() should get the correct features', function(done) {
+    test('req.fflip.has() should get the correct features', function(done) {
       var me = this;
       fflip._express_middleware(this.reqMock, this.resMock, function() {
         me.reqMock.fflip.setFeatures(userXYZ);
-        assert.strictEqual(me.reqMock.fflip.hasFeature('fOpen'), true);
-        assert.strictEqual(me.reqMock.fflip.hasFeature('fClosed'), false);
-        assert.strictEqual(me.reqMock.fflip.hasFeature('notafeature'), undefined);
+        assert.strictEqual(me.reqMock.fflip.has('fOpen'), true);
+        assert.strictEqual(me.reqMock.fflip.has('fClosed'), false);
+        assert.strictEqual(me.reqMock.fflip.has('notafeature'), undefined);
         done();
       });
     });
 
-    test('req.fflip.hasFeatures() should return null if features have not been set', function(done) {
+    test('req.fflip.has() should return null if features have not been set', function(done) {
       var me = this;
       var consoleErrorStub = sinon.stub(console, 'error'); // Supress Error Output
       fflip._express_middleware(this.reqMock, this.resMock, function() {
-        assert.strictEqual(me.reqMock.fflip.hasFeature('fOpen'), null);
-        assert.strictEqual(me.reqMock.fflip.hasFeature('fClosed'), null);
-        assert.strictEqual(me.reqMock.fflip.hasFeature('notafeature'), null);
+        assert.strictEqual(me.reqMock.fflip.has('fOpen'), null);
+        assert.strictEqual(me.reqMock.fflip.has('fClosed'), null);
+        assert.strictEqual(me.reqMock.fflip.has('notafeature'), null);
         done();
         consoleErrorStub.restore();
       });

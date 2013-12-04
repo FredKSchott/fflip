@@ -86,23 +86,6 @@ suite('fflip', function(){
       assert.equal(configData.criteria, fflip._criteria);
     });
 
-    test('should set criteria if given a syncronous loading function', function(){
-      var loadSyncronously = function() {
-        return configData.criteria;
-      };
-      fflip.config({criteria: loadSyncronously});
-      assert.equal(configData.criteria, fflip._criteria);
-    });
-
-    test('should set criteria if given an asyncronous loading function', function(done){
-      var loadAsyncronously = function(callback) {
-        callback(configData.criteria);
-        assert.equal(configData.criteria, fflip._criteria);
-        done();
-      };
-      fflip.config({criteria: loadAsyncronously});
-    });
-
     test('should set reloadRate if given reload', function(){
       fflip._reloadRate = 0;
       fflip.config(configData);
@@ -118,31 +101,25 @@ suite('fflip', function(){
 
     test('should be called every X seconds where X = reloadRate', function(done) {
       this.timeout(205);
-      var count = -99;
       var loadAsyncronously = function(callback) {
-        count++;
-        if(count >= 2) {
-          done();
-        }
         callback({});
+        done();
       };
-      fflip.config({features: loadAsyncronously, criteria: loadAsyncronously, reload: 0.2});
+      fflip.config({features: loadAsyncronously, reload: 0.2});
       count = 0;
     });
 
-    test('should update criteria and features', function(done){
-      var count;
+    test('should update features', function(done){
+      this.timeout(100);
+      var testReady = false;
       var loadAsyncronously = function(callback) {
-        count++;
         callback({});
+        if(testReady)
+          done();
       };
-      fflip.config({features: loadAsyncronously, criteria: loadAsyncronously});
-      count = 0;
+      fflip.config({features: loadAsyncronously});
+      testReady = true;
       fflip.reload();
-      setTimeout(function() {
-        assert.equal(count, 2);
-        done();
-      }, 100);
     });
 
   });

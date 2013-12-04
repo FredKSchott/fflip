@@ -74,28 +74,28 @@ var ExampleFeaturesObject = {
 void   config(options)                   // Configure fflip (see below)
 Object featuresForUser(user)             // Return object of true/false for all features for user
 Bool   userHasFeature(user, featureName) // Return true/false if featureName is enabled for user
-void   reload()                          // Force a reload of criteria/features
+void   reload()                          // Force a reload (if loading features dynamically)
 void   __express(app)                    // Connect with an Express app (see below)
 ```
 
 Configure __fflip__ using any of the following options:
 ```javascript
 fflip.config({
-  criteria: {}, // Object (see above) or Function (see below)
-  features: {}, // Object or Function
-  reload: 30,   // Time between refreshing features/criteria, in seconds
+  criteria: {}, // Criteria Object
+  features: {}, // Features Object | Function (see below)
+  reload: 30,   // Interval for refreshing features, in seconds
 });
 ```
 
-###Loading Features & Criteria Dynamically
-__fflip__ also accepts functions for loading criteria and features. If __fflip__ is passed a funciton with no arguments it will call the function and accept the return value. To load asyncronously, pass a function that sends a features/criteria data object to a callback. __fflip__ will recieve the callback and set the data accordingly. In both cases, __fflip__ will save these functions and call them again every X seconds, as set by the reload parameter.
+###Loading Features Dynamically
+__fflip__ also accepts functions for loading features. If __fflip__ is passed a funciton with no arguments it will call the function and accept the return value. To load asyncronously, pass a function that sends a features object to a callback. __fflip__ will recieve the callback and set the data accordingly. In both cases, __fflip__ will save the function and call it again every X seconds, as set by the reload parameter.
 ```javascript
 // Load Criteria Syncronously
-var getCriteriaSync = function() {
-  var collection = db.collection('criteria');
-  var criteriaArr = collection.find().toArray();
-  /* Proccess criteriaArr -> criteriaObj (format described above) */
-  return criteriaObj;
+var getFeaturesSync = function() {
+  var collection = db.collection('features');
+  var featuresArr = collection.find().toArray();
+  /* Proccess featuresArr -> featuresObj (format described above) */
+  return featuresObj;
 }
 
 // Load Features Asyncronously
@@ -109,9 +109,8 @@ var getFeaturesAsync = function(fflip_callback) {
 }
 
 fflip.config({
-  criteria: getCriteriaSync,
-  features: getFeaturesAsync,
-  reload: 60 /* Call each function again and update features every 60 secondss */
+  features: getFeaturesAsync, // or: getFeaturesSync
+  reload: 60 /* Call the function again and update every 60 secondss */
 });
 ```
 

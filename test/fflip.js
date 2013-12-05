@@ -155,14 +155,14 @@ suite('fflip', function(){
 
   });
 
-  suite('featuresForUser()', function(){
+  suite('userFeatures()', function(){
 
     setup(function() {
       fflip.config(configData);
     });
 
     test('should return an object of features for a user', function(){
-      var featuresABC = fflip.featuresForUser(userABC);
+      var featuresABC = fflip.userFeatures(userABC);
       assert.equal(featuresABC.fEmpty, false);
       assert.equal(featuresABC.fOpen, true);
       assert.equal(featuresABC.fClosed, false);
@@ -170,9 +170,9 @@ suite('fflip', function(){
     });
 
     test('should overwrite values when flags are set', function() {
-      var featuresXYZ = fflip.featuresForUser(userXYZ);
+      var featuresXYZ = fflip.userFeatures(userXYZ);
       assert.equal(featuresXYZ.fEval, false);
-      featuresXYZ = fflip.featuresForUser(userXYZ, {fEval: true});
+      featuresXYZ = fflip.userFeatures(userXYZ, {fEval: true});
       assert.equal(featuresXYZ.fEval, true);
     });
 
@@ -215,13 +215,13 @@ suite('fflip', function(){
       });
     });
 
-    test('req.fflip.setFeatures() should call featuresForUser() with cookie flags', function(done) {
+    test('req.fflip.setFeatures() should call userFeatures() with cookie flags', function(done) {
       var me = this;
-      var spy = sinon.spy(fflip, 'featuresForUser');
+      var spy = sinon.spy(fflip, 'userFeatures');
       fflip._express_middleware(this.reqMock, this.resMock, function() {
         me.reqMock.fflip.setForUser(userXYZ);
-        assert(fflip.featuresForUser.calledOnce);
-        assert(fflip.featuresForUser.calledWith(userXYZ, {fClosed: false}));
+        assert(fflip.userFeatures.calledOnce);
+        assert(fflip.userFeatures.calledWith(userXYZ, {fClosed: false}));
         spy.restore();
         done();
       });

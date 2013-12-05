@@ -27,7 +27,7 @@ fflip.config({
 });
 
 // Get a User's Enabled Features
-var Features = fflip.featuresForUser(someFreeUser);
+var Features = fflip.userFeatures(someFreeUser);
 if(Features.closedBeta) {
   console.log('Welcome to the Closed Beta!');
 }
@@ -83,7 +83,7 @@ var ExampleFeaturesObject = {
 ##Usage
 ```
 void   config(options)                   // Configure fflip (see below)
-Object featuresForUser(user)             // Return object of true/false for all features for user
+Object userFeatures(user)                // Return object of true/false for all features for user
 Bool   userHasFeature(user, featureName) // Return true/false if featureName is enabled for user
 void   reload()                          // Force a reload (if loading features dynamically)
 void   __express(app)                    // Connect with an Express app (see below)

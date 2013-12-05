@@ -1,6 +1,6 @@
 {
   "name": "fflip",
-  "description": "Full-Stack Feature Flipping",
+  "description": "Feature Flipping Across the Server and Client",
   "author": "Fred Schott <fredkschott@gmail.com>",
   "licence": "MIT",
   "version": "0.8.0",

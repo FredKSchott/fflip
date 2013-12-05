@@ -54,18 +54,28 @@ var ExampleCriteriaObject = {
 ```
 
 ###Features
-Features are sets of criteria to test users against. The value associated with the criteria is passed in as the data argument of the criteria function. A user will have a featured enabled if they match all listed criteria, otherwise the feature is disabled. Features are described as follows:
+Features contain sets of criteria to test users against. The value associated with the criteria is passed in as the data argument of the criteria function. A user will have a featured enabled if they match all listed criteria, otherwise the feature is disabled. Features can include other optional properties for context. Features are described as follows:
 ```javascript
 var ExampleFeaturesObject = {
   paidFeature: {
-    isPaidUser: true
+    criteria: {
+      isPaidUser: true
+    }
   },
   closedBeta: {
-    allowUserIDs: [20,30,80,181],
+    name: "A Closed Beta",
+    criteria: {
+      allowUserIDs: [20,30,80,181]
+    }
   },
   newFeatureRollout: {
-    isPaidUser: false,
-    percentageOfUsers: 0.50,
+    name: "A New Feature Rollout",
+    description: "Rollout of that new feature over the next month",
+    owner: "FredKSchott", // Remember: These are all optional, only criteria is required 
+    criteria: {
+      isPaidUser: false,
+      percentageOfUsers: 0.50
+    }
   }
 }
 ```

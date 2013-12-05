@@ -3,7 +3,7 @@
   "description": "Full-Stack Feature Flipping",
   "author": "Fred Schott <fredkschott@gmail.com>",
   "licence": "MIT",
-  "version": "0.6.2",
+  "version": "0.7.0",
   "main": "lib/fflip",
   "repository": "FredKSchott/fflip",
   "bugs": "https://github.com/FredKSchott/fflip/issues",

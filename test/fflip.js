@@ -219,7 +219,7 @@ suite('fflip', function(){
       var me = this;
       var spy = sinon.spy(fflip, 'featuresForUser');
       fflip._express_middleware(this.reqMock, this.resMock, function() {
-        me.reqMock.fflip.setFeatures(userXYZ);
+        me.reqMock.fflip.setForUser(userXYZ);
         assert(fflip.featuresForUser.calledOnce);
         assert(fflip.featuresForUser.calledWith(userXYZ, {fClosed: false}));
         spy.restore();
@@ -230,7 +230,7 @@ suite('fflip', function(){
     test('req.fflip.has() should get the correct features', function(done) {
       var me = this;
       fflip._express_middleware(this.reqMock, this.resMock, function() {
-        me.reqMock.fflip.setFeatures(userXYZ);
+        me.reqMock.fflip.setForUser(userXYZ);
         assert.strictEqual(me.reqMock.fflip.has('fOpen'), true);
         assert.strictEqual(me.reqMock.fflip.has('fClosed'), false);
         assert.strictEqual(me.reqMock.fflip.has('notafeature'), undefined);

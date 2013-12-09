@@ -120,8 +120,9 @@ var getFeaturesAsync = function(fflip_callback) {
 }
 
 fflip.config({
+  criteria: ExampleCriteriaObject,
   features: getFeaturesAsync, // or: getFeaturesSync
-  reload: 60 /* Call the function again and update every 60 secondss */
+  reload: 60 // update available features every 60 seconds
 });
 ```
 

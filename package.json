@@ -1,9 +1,9 @@
 {
   "name": "fflip",
-  "description": "Conditional feature flipping across the server and client.",
+  "description": "Advanced Feature Flipping/Toggling Across the Server & Client",
   "author": "Fred Schott <fredkschott@gmail.com>",
   "licence": "MIT",
-  "version": "0.9.0",
+  "version": "1.0.0",
   "main": "lib/fflip",
   "repository": "FredKSchott/fflip",
   "bugs": "https://github.com/FredKSchott/fflip/issues",

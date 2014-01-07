@@ -151,3 +151,5 @@ The __fflip__ Express middleware wraps res.render() to always the req.fflip.feat
 
 ##Special Thanks
 Original logo designed by <a href="http://thenounproject.com/Luboš Volkov" target="_blank">Luboš Volkov</a>
+
+[![Analytics](https://ga-beacon.appspot.com/UA-39778226-2/fflip/Readme.md)](https://github.com/igrigorik/ga-beacon)  

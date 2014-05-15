@@ -2,9 +2,8 @@
 
 <img src="http://fredkschott.com/images/fflipIcon2.png" /> fflip
 ============================ 
-__Follow [@FredKSchott](http://www.twitter.com/fredkschott) for development news and updates!__
 
-Working on an experimental new design? Starting a closed beta? Rolling out a new feature over the next few weeks? Fa-fa-fa-flip it! __fflip__ gives you complete control over releasing new functionality to your users based on thier user id, join date, membership status, and whatever else you can think of. __fflip's__ goal is to be the most powerful and extendable feature flipping/toggling module out there.
+Working on an experimental new design? Starting a closed beta? Rolling out a new feature over the next few weeks? Fa-fa-fa-flip it! __fflip__ gives you complete control over releasing new functionality to your users based on thier user id, join date, membership status, and whatever else you can think of. __fflip's__ goal is to be the most powerful and extendable feature flipping/toggling module on. the. planet.
 
 - Describes __custom criteria and features__ using easy-to-read JSON
 - Delivers features down to the client for additional __client-side feature flipping__
@@ -151,5 +150,3 @@ The __fflip__ Express middleware wraps res.render() to always the req.fflip.feat
 
 ##Special Thanks
 Original logo designed by <a href="http://thenounproject.com/Luboš Volkov" target="_blank">Luboš Volkov</a>
-
-[![Analytics](https://ga-beacon.appspot.com/UA-39778226-2/fflip/Readme.md)](https://github.com/igrigorik/ga-beacon)  

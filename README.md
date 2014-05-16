@@ -7,7 +7,7 @@ Working on an experimental new design? Starting a closed beta? Rolling out a new
 
 - Describes __custom criteria and features__ using easy-to-read JSON
 - Delivers features down to the client for additional __client-side feature flipping__
-- Includes __Express Middleware__ for easy integration with Express applications  
+- Includes __Express Middleware__ for special features like __feature flipping via cookie__
 - __Everything-Agnostic:__ Supports any database, user representation or framework you can throw at it
 
 ```

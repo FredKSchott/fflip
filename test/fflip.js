@@ -203,6 +203,16 @@ suite('fflip', function(){
       });
     });
 
+    test('should allow res.render() to be called without model object', function(done) {
+      var me = this;
+      fflip._express_middleware(this.reqMock, this.resMock, function() {
+        assert.doesNotThrow(function() {
+          me.resMock.render('testview');
+        });
+        done();
+      });
+    });
+
     test('should wrap res.render() to set features object automatically', function(done) {
       var me = this;
       fflip._express_middleware(this.reqMock, this.resMock, function() {

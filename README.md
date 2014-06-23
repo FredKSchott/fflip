@@ -145,7 +145,7 @@ req.fflip = {
 ```
 
 ####Automatically deliver Features to the client  
-The __fflip__ Express middleware wraps res.render() to always the req.fflip.features object as a  ``Features`` template variable. To deliver this down to the client, just make sure your template contains the code ``<script>var Features = <%= Features %></script>``.
+The __fflip__ Express middleware wraps res.render() to always the req.fflip.features object as a  ``Features`` template variable. To deliver this down to the client, just make sure your template contains the code ``<script>var Features = <%= FeaturesJSON %></script>``.
 
 
 ##Special Thanks

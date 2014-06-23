@@ -203,14 +203,30 @@ suite('fflip', function(){
       });
     });
 
+    test('should allow res.render() to be called without model object', function(done) {
+      var me = this;
+      fflip._express_middleware(this.reqMock, this.resMock, function() {
+        assert.doesNotThrow(function() {
+          me.resMock.render('testview');
+        });
+        done();
+      });
+    });
+
     test('should wrap res.render() to set features object automatically', function(done) {
       var me = this;
       fflip._express_middleware(this.reqMock, this.resMock, function() {
-        me.reqMock.fflip = {features : { fClosed: true }};
+        var features = {features : { fClosed: true }};
+        var featuresString = JSON.stringify(features);
+
+        me.reqMock.fflip.features = features;
         me.resMock.render('testview', {});
         assert(me.renderOriginal.calledOnce);
-        var featuresString = JSON.stringify(me.reqMock.fflip.features);
-        assert(me.renderOriginal.calledWith('testview', {Features: featuresString}));
+
+        assert(me.renderOriginal.calledWith('testview', {
+          Features: features,
+          FeaturesJSON: featuresString
+        }));
         done();
       });
     });

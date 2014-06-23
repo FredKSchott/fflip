@@ -7,14 +7,14 @@ module.exports = function(grunt) {
       nyan: {
         options: {
           reporter: 'nyan',
-          ui: 'tdd'
+          ui: 'bdd'
         },
         src: ['test/fflip.js']
       },
       spec: {
         options: {
           reporter: 'spec',
-          ui: 'tdd'
+          ui: 'bdd'
         },
         src: ['test/fflip.js']
       }

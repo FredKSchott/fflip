@@ -294,16 +294,26 @@ suite('fflip', function(){
       }
     });
 
-    test('should return a 404 json object if feature does not exist', function() {
+    test('should propogate a 404 error if feature does not exist', function(done) {
+      var next = sinon.stub();
       this.reqMock.params.name = 'doesnotexist';
-      fflip._express_route(this.reqMock, this.resMock);
-      assert(this.resMock.json.calledWith(404));
+      fflip._express_route(this.reqMock, this.resMock, function(err) {
+        assert(err);
+        assert(err.fflip);
+        assert.equal(err.statusCode, 404);
+        done();
+      });
     });
 
-    test('should return a 500 json object if cookies are not enabled', function() {
+    test('should propogate a 500 error if cookies are not enabled', function(done) {
+      var next = sinon.stub();
       this.reqMock.cookies = null;
-      fflip._express_route(this.reqMock, this.resMock);
-      assert(this.resMock.json.calledWith(500));
+      fflip._express_route(this.reqMock, this.resMock, function(err) {
+        assert(err);
+        assert(err.fflip);
+        assert.equal(err.statusCode, 500);
+        done();
+      });
     });
 
     test('should set the right cookie flags', function() {

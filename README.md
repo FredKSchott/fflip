@@ -3,7 +3,7 @@
 <img src="http://fredkschott.com/images/fflipIcon2.png" /> fflip
 ============================ 
 
-Working on an experimental new design? Starting a closed beta? Rolling out a new feature over the next few weeks? Fa-fa-fa-flip it! __fflip__ gives you complete control over releasing new functionality to your users based on thier user id, join date, membership status, and whatever else you can think of. __fflip's__ goal is to be the most powerful and extendable feature flipping/toggling module on. the. planet.
+Working on an experimental new design? Starting a closed beta? Rolling out a new feature over the next few weeks? Fa-fa-fa-flip it! __fflip__ gives you complete control over releasing new functionality to your users based on their user id, join date, membership status, and whatever else you can think of. __fflip's__ goal is to be the most powerful and extensible feature flipping/toggling module on. the. planet.
 
 - Describes __custom criteria and features__ using easy-to-read JSON
 - Delivers features down to the client for additional __client-side feature flipping__
@@ -98,9 +98,9 @@ fflip.config({
 ```
 
 ###Loading Features Dynamically
-__fflip__ also accepts functions for loading features. If __fflip__ is passed a funciton with no arguments it will call the function and accept the return value. To load asyncronously, pass a function that sends a features object to a callback. __fflip__ will recieve the callback and set the data accordingly. In both cases, __fflip__ will save the function and call it again every X seconds, as set by the reload parameter.
+__fflip__ also accepts functions for loading features. If __fflip__ is passed a function with no arguments it will call the function and accept the return value. To load asynchronously, pass a function that sends a features object to a callback. __fflip__ will receive the callback and set the data accordingly. In both cases, __fflip__ will save the function and call it again every X seconds, as set by the reload parameter.
 ```javascript
-// Load Criteria Syncronously
+// Load Criteria Synchronously
 var getFeaturesSync = function() {
   var collection = db.collection('features');
   var featuresArr = collection.find().toArray();
@@ -108,12 +108,12 @@ var getFeaturesSync = function() {
   return featuresObj;
 }
 
-// Load Features Asyncronously
+// Load Features Asynchronously
 var getFeaturesAsync = function(fflip_callback) {
   var collection = db.collection('features');
   collection.find().toArray(function(err, featuresArr) {
     /* Handle err
-     * Proccess featuresArr -> featuresObj (format described above) */
+     * Process featuresArr -> featuresObj (format described above) */
     fflip_callback(featuresObj);
   });
 }
@@ -134,13 +134,11 @@ Just call ``fflip.express(app)`` wherever you set up your express application to
 If you have cookies enabled, you can visit ``/fflip/:name/:action`` to manually override a feature to always return true/false for your own session. Just replace ':name' with the Feature name and ':action' with 1 to enable, 0 to disable, or -1 to reset (remove the cookie override). This override is stored in the user's cookie.
 
 ####req.fflip
-A __fflip__ object is attached to the request, and includes the following funciontality:
+A __fflip__ object is attached to the request, and includes the following functionality:
 ```
 req.fflip = {
-  flags: Any override flags set by the fflip cookie
-  features: A user's fflip features object. Empty until setForUser() is called.
-  setForUser(user): Given a user, attaches the features object to the request (at req.fflip.features)
-  has(featureName): Given a feature name, returns the feature boolean, undefined if feature doesn't exist, or null if setForUser() has't been called
+  setForUser(user): Given a user, attaches the features object to the request (at req.fflip.features). Make sure you do this before calling has()!
+  has(featureName): Given a feature name, returns the feature boolean, undefined if feature doesn't exist. Throws an error if setForUser() hasn't been called
 }
 ```
 

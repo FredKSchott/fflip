@@ -123,7 +123,6 @@ describe('fflip', function(){
 				done();
 			};
 			fflip.config({features: loadAsyncronously, reload: 0.2});
-			count = 0;
 		});
 
 		it('should update features', function(done){
@@ -210,7 +209,7 @@ describe('fflip', function(){
 			var me = this;
 			fflip._express_middleware(this.reqMock, this.resMock, function() {
 				assert(me.reqMock.fflip);
-				assert(me.reqMock.fflip.flags, me.reqMock.cookies.fflip);
+				assert(me.reqMock.fflip._flags, me.reqMock.cookies.fflip);
 				done();
 			});
 		});
@@ -266,15 +265,12 @@ describe('fflip', function(){
 			});
 		});
 
-		it('req.fflip.has() should return null if features have not been set', function(done) {
+		it('req.fflip.has() should throw when called before features have been set', function() {
 			var me = this;
-			var consoleErrorStub = sandbox.stub(console, 'error'); // Supress Error Output
-			fflip._express_middleware(this.reqMock, this.resMock, function() {
-				assert.strictEqual(me.reqMock.fflip.has('fOpen'), null);
-				assert.strictEqual(me.reqMock.fflip.has('fClosed'), null);
-				assert.strictEqual(me.reqMock.fflip.has('notafeature'), null);
-				done();
-				consoleErrorStub.restore();
+			assert.throws(function() {
+				fflip._express_middleware(this.reqMock, this.resMock, function() {
+					me.reqMock.fflip.has('fOpen');
+				});
 			});
 		});
 

@@ -144,10 +144,12 @@ req.fflip = {
 ```
 
 ####Use fflip in your templates
-The __fflip__ Express middleware includes a `Features` template variable that contains your user's enabled features. Here is an example of how to use it with Handlebars: `{{#if Features.closedBeta}} //...` *NOTE: This will only be populated if you call `req.fflip.setForUser` beforehand.*
+*NOTE: This will only be populated if you call `req.fflip.setForUser` beforehand.*  
+The __fflip__ Express middleware includes a `Features` template variable that contains your user's enabled features. Here is an example of how to use it with Handlebars: `{{#if Features.closedBeta}} Welcome to the Beta! {{/if}}`
 
 ####Use fflip on the client  
-The __fflip__ Express middleware also includes a `FeaturesJSON` template variable that is the JSON string of your user's enabled features. To deliver this down to the client, just make sure your template something like this: ``<script>var Features = {{ FeaturesJSON }}; </script>``. *NOTE: This will only be populated if you call `req.fflip.setForUser` beforehand.*
+*NOTE: This will only be populated if you call `req.fflip.setForUser` beforehand.*  
+The __fflip__ Express middleware also includes a `FeaturesJSON` template variable that is the JSON string of your user's enabled features. To deliver this down to the client, just make sure your template something like this: ``<script>var Features = {{ FeaturesJSON }}; </script>``. 
 
 
 ##Special Thanks

@@ -7,7 +7,7 @@ Working on an experimental new design? Starting a closed beta? Rolling out a new
 
 - Describes __custom criteria and features__ using easy-to-read JSON
 - Delivers features down to the client for additional __client-side feature flipping__
-- Includes __Express Middleware__ for special features like __feature flipping via cookie__
+- Includes __Express Middleware__ for additional features like __feature flipping via cookie__
 - __Everything-Agnostic:__ Supports any database, user representation or framework you can throw at it
 
 ```
@@ -85,7 +85,7 @@ void   config(options)                   // Configure fflip (see below)
 Object userFeatures(user)                // Return object of true/false for all features for user
 Bool   userHasFeature(user, featureName) // Return true/false if featureName is enabled for user
 void   reload()                          // Force a reload (if loading features dynamically)
-void   express(app)                      // Connect with an Express app (see below)
+void   express(app)                      // Connect with an Express app or router (see below)
 ```
 
 Configure __fflip__ using any of the following options:
@@ -104,7 +104,7 @@ __fflip__ also accepts functions for loading features. If __fflip__ is passed a 
 var getFeaturesSync = function() {
   var collection = db.collection('features');
   var featuresArr = collection.find().toArray();
-  /* Proccess featuresArr -> featuresObj (format described above) */
+  /* Process featuresArr -> featuresObj (format described above) */
   return featuresObj;
 }
 
@@ -128,10 +128,11 @@ fflip.config({
 
 ##Express Integration
 __fflip__ provides easy integration with the popular web framework [Express](https://github.com/visionmedia/express).  
-Just call ``fflip.express(app)`` wherever you set up your express application to enable the following:
+Just call ``fflip.express()`` with your Express application or Express 4.0 router to enable the following:
 
-####__A route for manually flipping on/off features__  
-If you have cookies enabled, you can visit ``/fflip/:name/:action`` to manually override a feature to always return true/false for your own session. Just replace ':name' with the Feature name and ':action' with 1 to enable, 0 to disable, or -1 to reset (remove the cookie override). This override is stored in the user's cookie.
+
+####A route for manually flipping on/off features
+If you have cookies enabled, you can visit ``/fflip/:name/:action`` to manually override a feature to always return true/false for your own session. Just replace ':name' with the Feature name and ':action' with 1 to enable, 0 to disable, or -1 to reset (remove the cookie override). This override is stored as in the user's cookie under the name `fflip`.
 
 ####req.fflip
 A __fflip__ object is attached to the request, and includes the following functionality:
@@ -142,8 +143,11 @@ req.fflip = {
 }
 ```
 
-####Automatically deliver Features to the client  
-The __fflip__ Express middleware wraps res.render() to always the req.fflip.features object as a  ``Features`` template variable. To deliver this down to the client, just make sure your template contains the code ``<script>var Features = <%= FeaturesJSON %></script>``.
+####Use fflip in your templates
+The __fflip__ Express middleware includes a `Features` template variable that contains your user's enabled features. Here is an example of how to use it with Handlebars: `{{#if Features.closedBeta}} //...` *NOTE: This will only be populated if you call `req.fflip.setForUser` beforehand.*
+
+####Use fflip on the client  
+The __fflip__ Express middleware also includes a `FeaturesJSON` template variable that is the JSON string of your user's enabled features. To deliver this down to the client, just make sure your template something like this: ``<script>var Features = {{ FeaturesJSON }}; </script>``. *NOTE: This will only be populated if you call `req.fflip.setForUser` beforehand.*
 
 
 ##Special Thanks

@@ -260,7 +260,7 @@ describe('fflip', function(){
 				me.reqMock.fflip.setForUser(userXYZ);
 				assert.strictEqual(me.reqMock.fflip.has('fOpen'), true);
 				assert.strictEqual(me.reqMock.fflip.has('fClosed'), false);
-				assert.strictEqual(me.reqMock.fflip.has('notafeature'), undefined);
+				assert.strictEqual(me.reqMock.fflip.has('notafeature'), false);
 				done();
 			});
 		});

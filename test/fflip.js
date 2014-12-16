@@ -41,7 +41,7 @@ var configData = {
 				c1: true
 			}
 		},
-		fClosed: { 
+		fClosed: {
 			criteria: {
 				c1: false
 			}
@@ -203,6 +203,10 @@ describe('fflip', function(){
 			this.resMock = {
 				render: this.renderOriginal
 			};
+			this.appMock = {
+				use: sandbox.spy(),
+				get: sandbox.spy()
+			};
 		});
 
 		it('should set fflip object onto req', function(done) {
@@ -284,6 +288,16 @@ describe('fflip', function(){
 			});
 		});
 
+		it('should mount express middleware into provided app', function() {
+			fflip.express(this.appMock);
+			assert.ok(this.appMock.use.calledWith(fflip._express_middleware));
+		});
+
+		it('should add GET route for manual feature flipping into provided app', function() {
+			fflip.express(this.appMock);
+			assert.ok(this.appMock.get.calledWith('/fflip/:name/:action', fflip._express_route));
+		});
+
 	});
 
 	describe('express route', function(){
@@ -341,14 +355,14 @@ describe('fflip', function(){
 		//     done();
 		//   });
 		// });
-		
+
 		// it('should return a 400 error if action is invalid', function() {
 		//   request.get('/fflip/fOpen/5').expect(400, function(err){
 		//     if(err) done(err);
 		//     done();
 		//   });
 		// });
-		
+
 		// it('should return a 200 sucess if request was valid', function() {
 		//   request.get('/fflip/fOpen/1').expect(400, function(err){
 		//     if(err) done(err);

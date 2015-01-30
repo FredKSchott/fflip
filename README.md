@@ -151,6 +151,12 @@ The __fflip__ Express middleware includes a `Features` template variable that co
 *NOTE: This will only be populated if you call `req.fflip.setForUser` beforehand.*  
 The __fflip__ Express middleware also includes a `FeaturesJSON` template variable that is the JSON string of your user's enabled features. To deliver this down to the client, just make sure your template something like this: ``<script>var Features = {{ FeaturesJSON }}; </script>``. 
 
+####Low-level integration
+If you need a finer-grained Express integration, such as changing the URL for manual overrides, adding security middleware, or applying middleware on a subset of routes, you can use ``express_middleware`` and ``express_route`` directly.
+```
+app.use(fflip.express_middleware);
+app.get('/custom_path/:name/:action', fflip.express_route);
+```
 
 ##Special Thanks
 Original logo designed by <a href="http://thenounproject.com/Luboš Volkov" target="_blank">Luboš Volkov</a>

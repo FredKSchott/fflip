@@ -1,7 +1,7 @@
-[![Build Status](https://travis-ci.org/FredKSchott/fflip.png)](https://travis-ci.org/FredKSchott/fflip) 
-
-<img src="http://fredkschott.com/images/fflipIcon2.png" /> fflip
-============================ 
+<a href="https://www.npmjs.com/package/fflip">
+  <img align="right" src="https://nodei.co/npm/fflip.png?compact=true" />
+</a>
+# <img src="http://fredkschott.com/images/fflipIcon2.png" /> fflip
 
 Working on an experimental new design? Starting a closed beta? Rolling out a new feature over the next few weeks? Fa-fa-fa-flip it! __fflip__ gives you complete control over releasing new functionality to your users based on their user id, join date, membership status, and whatever else you can think of. __fflip's__ goal is to be the most powerful and extensible feature flipping/toggling module on. the. planet.
 

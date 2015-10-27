@@ -25,9 +25,13 @@ fflip.config({
   features: ExampleFeaturesObject  // defined below
 });
 
-// Get a User's Enabled Features
+// Get all of a user's enabled features
 var Features = fflip.userFeatures(someFreeUser);
 if(Features.closedBeta) {
+  console.log('Welcome to the Closed Beta!');
+}
+// Or, just get a single one
+if (fflip.userHasFeature(someFreeUser, 'closedBeta')) {
   console.log('Welcome to the Closed Beta!');
 }
 ```
@@ -43,11 +47,7 @@ var ExampleCriteriaObject = {
     return (user.id % 100 < percent * 100);
   },
   allowUserIDs: function(user, idArr) {
-    for(var id in idArr) {
-      if(user.id == idArr[id]) 
-        return true;
-    }
-    return false;
+    return idArr.indexOf(user.id) > -1;
   }
 }
 ```

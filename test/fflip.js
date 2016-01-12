@@ -343,6 +343,16 @@ describe('fflip', function(){
 			assert(this.resMock.cookie.calledWithMatch('fflip', {fClosed: true}, { maxAge: 900000 }));
 		});
 
+		it('should set the right cookie flags when maxCookieAge is set', function() {
+			var oneMonthMs = 31 * 86400 * 1000;
+			var oldMaxCookieAge = fflip.maxCookieAge;
+			fflip.maxCookieAge = oneMonthMs;
+			fflip.express_route(this.reqMock, this.resMock);
+			fflip.maxCookieAge = oldMaxCookieAge;
+
+			assert(this.resMock.cookie.calledWithMatch('fflip', {fClosed: true}, { maxAge: oneMonthMs }));
+		});
+
 		it('should send back 200 json response on successful call', function() {
 			fflip.express_route(this.reqMock, this.resMock);
 			assert(this.resMock.json.calledWith(200));

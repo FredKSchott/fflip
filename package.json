@@ -1,7 +1,7 @@
 {
   "name": "fflip",
-  "description": "Advanced Feature Flipping/Toggling Across the Server & Client",
-  "author": "Fred Schott <fredkschott@gmail.com>",
+  "description": "Advanced Feature Flipping/Toggling Across the Server and Client",
+  "author": "Fred Schott <fkschott@gmail.com>",
   "licence": "MIT",
   "version": "2.2.0",
   "main": "lib/fflip",

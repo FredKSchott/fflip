@@ -81,11 +81,11 @@ var ExampleFeaturesObject = {
 
 ##Usage
 ```
-void   config(options)                   // Configure fflip (see below)
-Object userFeatures(user)                // Return object of true/false for all features for user
-Bool   userHasFeature(user, featureName) // Return true/false if featureName is enabled for user
-void   reload()                          // Force a reload (if loading features dynamically)
-void   express(app)                      // Connect with an Express app or router (see below)
+.config(options) -> void                         // Configure fflip (see below)
+.userHasFeature(user, featureName) -> boolean    // Return true/false if featureName is enabled for user
+.userFeatures(user) -> Object                    // Return object of true/false for all features for user
+.reload() -> void                                // Force a reload (if loading features dynamically)
+.express(app) -> void                            // Connect with an Express app or router (see below)
 ```
 
 Configure __fflip__ using any of the following options:

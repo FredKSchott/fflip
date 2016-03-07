@@ -3,12 +3,12 @@
 </a>
 # <img src="http://fredkschott.com/img/fflipIcon2.png" /> fflip
 
-Working on an experimental new design? Starting a closed beta? Rolling out a new feature over the next few weeks? Fa-fa-fa-flip it! __fflip__ gives you complete control over releasing new functionality to your users based on their user id, join date, membership status, and whatever else you can think of. __fflip's__ goal is to be the most powerful and extensible feature flipping/toggling module on. the. planet.
+Working on an experimental new design? Starting a closed beta? Rolling out a new feature over the next few weeks? Fa-fa-fa-flip it! __fflip__ gives you complete control over releasing new functionality to your users based on their user id, join date, membership status, and whatever else you can think of. __fflip's__ goal is to be the most powerful and extensible feature flipping/toggling module out there.
 
 - Describes __custom criteria and features__ using easy-to-read JSON
-- Delivers features down to the client for additional __client-side feature flipping__
+- Delivers features down to the client for __client-side feature flipping__
 - Includes __Express Middleware__ for additional features like __feature flipping via cookie__
-- __Everything-Agnostic:__ Supports any database, user representation or framework you can throw at it
+- __System-Agnostic:__ Built to support any database, user representation or web framework you can throw at it
 
 ```
 npm install fflip --save
@@ -29,12 +29,12 @@ fflip.config({
 });
 
 // Get all of a user's enabled features...
-var Features = fflip.getFeaturesForUser(someFreeUser);
-if(Features.closedBeta === true) {
+someFreeUser.features = fflip.getFeaturesForUser(someFreeUser);
+if(someFreeUser.features.closedBeta === true) {
   console.log('Welcome to the Closed Beta!');
 }
 
-// ... or just check a single feature.
+// ... or just check this single feature.
 if (fflip.isFeatureEnabledForUser('closedBeta', someFreeUser) === true) {
   console.log('Welcome to the Closed Beta!');
 }
@@ -43,49 +43,75 @@ if (fflip.isFeatureEnabledForUser('closedBeta', someFreeUser) === true) {
 
 ### Criteria
 
-Criteria are the rules that features can test users against. Each rule takes a user and a data argument to test against, and returns true/false if the user matches that criteria. The data argument can be any type, as long as you handle it correctly in the function you describe.
+**Criteria** are the rules that define access to different features. Each criteria takes a user object and some data as arguments, and returns true/false if the user matches that criteria. You will use these criteria to restrict/allow features for different subsets of your userbase.
 
 ```javascript
-var ExampleCriteriaObject = {
-  isPaidUser: function(user, isPaid) {
-    return user.isPaid == isPaid;
+var ExampleCriteria = [
+  {
+    id: 'isPaidUser', // required
+    check: function(user, isPaid) { // required
+      return user.isPaid == isPaid;
+    }
   },
-  percentageOfUsers: function(user, percent) {
-    return (user.id % 100 < percent * 100);
+  {
+    id: 'percentageOfUsers',
+    check: function(user, percent) {
+      return (user.id % 100 < percent * 100);
+    }
   },
-  allowUserIDs: function(user, idArr) {
-    return idArr.indexOf(user.id) > -1;
+  {
+    id: 'allowUserIDs',
+    check: function(user, allowedIDs) {
+      return allowedIDs.indexOf(user.id) > -1;
+    }
   }
-}
+];
 ```
 
 
-###Features
+### Features
 
-Features contain sets of criteria to test users against. The value associated with the criteria is passed in as the data argument of the criteria function. A user will have a featured enabled if they match all listed criteria, otherwise the feature is disabled. Features can include other optional properties for context. Features are described as follows:
+**Features** represent some special behaviors in your application. They also define a set of criteria to test users against for each feature. When you ask fflip if a feature is enabled for some user, it will check that user against each rule/criteria, and return "true" if the user passes.
+
+Features are described in the following way:
 
 ```javascript
-var ExampleFeaturesObject = {
-  paidFeature: {
-    criteria: {
-      isPaidUser: true
-    }
+var ExampleFeatures = [
+  {
+    id: 'closedBeta', // required
+    // if `criteria` is in an object, ALL criteria in that set must evaluate to true to enable for user
+    criteria: {isPaidUser: true, percentageOfUsers: 0.50}
   },
-  closedBeta: {
-    name: "A Closed Beta",
-    criteria: {
-      allowUserIDs: [20,30,80,181]
-    }
+  {
+    id: 'newFeatureRollout',
+    // if `criteria` is in an array, ANY ONE set of criteria must evaluate to true to enable for user
+    criteria: [{isPaidUser: true}, {percentageOfUsers: 0.50}]
   },
-  newFeatureRollout: {
-    name: "A New Feature Rollout",
-    description: "Rollout of that new feature over the next month",
-    owner: "FredKSchott", // Remember: These are all optional, only criteria is required 
-    criteria: {
-      isPaidUser: false,
-      percentageOfUsers: 0.50
-    }
-  }
+  {
+    id: 'experimentalFeature',
+    name: 'An Experimental Feature', // user-defined properties are optional but can be used to add important metadata
+    description: 'Experimental feature still in development, useful for internal development', // user-defined
+    owner: 'Fred K. Schott <fkschott@gmail.com>', // user-defined
+    enabled: false, // sets the feature on or off for all users, required unless `criteria` is present instead
+  },
+]
+```
+
+The value present for each rule is passed in as the data argument to it's criteria function. This allows you to write more general, flexible, reusable rules.
+
+Rule sets & lists can be nested and combined. It can help to think of criteria sets as a group of `AND` operators, and lists as a set of `OR` operators.
+
+
+#### Veto Powers
+
+If you'd like to allow wider access to your feature while still preventing a specific type of user, you can use the `$veto` property. If the `$veto` property is present on a member of a criteria list (array), and that member evaluates to false, the entire list will evaluate to false regardless of it's other members.
+
+```javascript
+{
+  // Enabled if user is paid OR in the lucky 50% group of other users OR is using a modern browser
+  criteria: [{isPaidUser: true}, {percentageOfUsers: 0.50}, {usingModernBrowser: true}]
+  // Enabled if user is paid OR in the lucky 50% group of other users, BUT ONLY if using a modern browser
+  criteria: [{isPaidUser: true}, {percentageOfUsers: 0.50}, {usingModernBrowser: true, $veto: true}]
 }
 ```
 
@@ -105,8 +131,8 @@ Configure fflip using any of the following options:
 
 ```javascript
 fflip.config({
-  criteria: {}, // Criteria Object
-  features: {}, // Features Object | Function (see below)
+  criteria: {}, // Criteria Array
+  features: {}, // Features Array | Function (see below)
   reload: 30,   // Interval for refreshing features, in seconds
 });
 ```
@@ -164,7 +190,7 @@ req.fflip = {
 
 **Use fflip in your templates:** Once `setForUser()` has been called, fflip will include a `Features` template variable that contains your user's enabled features. Here is an example of how to use it with Handlebars: `{{#if Features.closedBeta}} Welcome to the Beta! {{/if}}`
 
-**Use fflip on the client:** Once `setForUser()` has been called, The will also include a `FeaturesJSON` template variable that is the JSON string of your user's enabled features. To deliver this down to the client, just make sure your template something like this: `<script>var Features = {{ FeaturesJSON }}; </script>`.
+**Use fflip on the client:** Once `setForUser()` has been called, fflip will also include a `FeaturesJSON` template variable that is the JSON string of your user's enabled features. To deliver this down to the client, just make sure your template something like this: `<script>var Features = {{ FeaturesJSON }}; </script>`.
 
 
 #### fflip.expressRoute()

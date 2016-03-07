@@ -140,40 +140,40 @@ describe('fflip', function(){
 
 	});
 
-	describe('userHasFeature()', function(){
+	describe('isFeatureEnabledForUser()', function() {
 
 		beforeEach(function() {
 			fflip.config(configData);
 		});
 
 		it('should return null if features does not exist', function(){
-			assert.equal(null, fflip.userHasFeature(userABC, 'notafeature'));
+			assert.equal(null, fflip.isFeatureEnabledForUser('notafeature', userABC));
 		});
 
 		it('should return false if no criteria set', function(){
-			assert.equal(false, fflip.userHasFeature(userABC, 'fEmpty'));
+			assert.equal(false, fflip.isFeatureEnabledForUser('fEmpty', userABC));
 		});
 
 		it('should return false if all feature critieria evaluates to false', function(){
-			assert.equal(false, fflip.userHasFeature(userABC, 'fClosed'));
-			assert.equal(false, fflip.userHasFeature(userXYZ, 'fEval'));
+			assert.equal(false, fflip.isFeatureEnabledForUser('fClosed', userABC));
+			assert.equal(false, fflip.isFeatureEnabledForUser('fEval', userXYZ));
 		});
 
 		it('should return true if one feature critieria evaluates to true', function(){
-			assert.equal(true, fflip.userHasFeature(userABC, 'fOpen'));
-			assert.equal(true, fflip.userHasFeature(userABC, 'fEval'));
+			assert.equal(true, fflip.isFeatureEnabledForUser('fOpen', userABC));
+			assert.equal(true, fflip.isFeatureEnabledForUser('fEval', userABC));
 		});
 
 	});
 
-	describe('userFeatures()', function(){
+	describe('getFeaturesForUser()', function(){
 
 		beforeEach(function() {
 			fflip.config(configData);
 		});
 
 		it('should return an object of features for a user', function(){
-			var featuresABC = fflip.userFeatures(userABC);
+			var featuresABC = fflip.getFeaturesForUser(userABC);
 			assert.equal(featuresABC.fEmpty, false);
 			assert.equal(featuresABC.fOpen, true);
 			assert.equal(featuresABC.fClosed, false);
@@ -181,9 +181,9 @@ describe('fflip', function(){
 		});
 
 		it('should overwrite values when flags are set', function() {
-			var featuresXYZ = fflip.userFeatures(userXYZ);
+			var featuresXYZ = fflip.getFeaturesForUser(userXYZ);
 			assert.equal(featuresXYZ.fEval, false);
-			featuresXYZ = fflip.userFeatures(userXYZ, {fEval: true});
+			featuresXYZ = fflip.getFeaturesForUser(userXYZ, {fEval: true});
 			assert.equal(featuresXYZ.fEval, true);
 		});
 
@@ -211,7 +211,7 @@ describe('fflip', function(){
 
 		it('should set fflip object onto req', function(done) {
 			var me = this;
-			fflip.express_middleware(this.reqMock, this.resMock, function() {
+			fflip.expressMiddleware(this.reqMock, this.resMock, function() {
 				assert(me.reqMock.fflip);
 				assert(me.reqMock.fflip._flags, me.reqMock.cookies.fflip);
 				done();
@@ -220,7 +220,7 @@ describe('fflip', function(){
 
 		it('should allow res.render() to be called without model object', function(done) {
 			var me = this;
-			fflip.express_middleware(this.reqMock, this.resMock, function() {
+			fflip.expressMiddleware(this.reqMock, this.resMock, function() {
 				assert.doesNotThrow(function() {
 					me.resMock.render('testview');
 				});
@@ -230,7 +230,7 @@ describe('fflip', function(){
 
 		it('should wrap res.render() to set features object automatically', function(done) {
 			var me = this;
-			fflip.express_middleware(this.reqMock, this.resMock, function() {
+			fflip.expressMiddleware(this.reqMock, this.resMock, function() {
 				var features = {features : { fClosed: true }};
 				var featuresString = JSON.stringify(features);
 
@@ -246,13 +246,13 @@ describe('fflip', function(){
 			});
 		});
 
-		it('req.fflip.setFeatures() should call userFeatures() with cookie flags', function(done) {
+		it('req.fflip.setFeatures() should call getFeaturesForUser() with cookie flags', function(done) {
 			var me = this;
-			var spy = sandbox.spy(fflip, 'userFeatures');
-			fflip.express_middleware(this.reqMock, this.resMock, function() {
+			var spy = sandbox.spy(fflip, 'getFeaturesForUser');
+			fflip.expressMiddleware(this.reqMock, this.resMock, function() {
 				me.reqMock.fflip.setForUser(userXYZ);
-				assert(fflip.userFeatures.calledOnce);
-				assert(fflip.userFeatures.calledWith(userXYZ, {fClosed: false}));
+				assert(fflip.getFeaturesForUser.calledOnce);
+				assert(fflip.getFeaturesForUser.calledWith(userXYZ, {fClosed: false}));
 				spy.restore();
 				done();
 			});
@@ -260,7 +260,7 @@ describe('fflip', function(){
 
 		it('req.fflip.has() should get the correct features', function(done) {
 			var me = this;
-			fflip.express_middleware(this.reqMock, this.resMock, function() {
+			fflip.expressMiddleware(this.reqMock, this.resMock, function() {
 				me.reqMock.fflip.setForUser(userXYZ);
 				assert.strictEqual(me.reqMock.fflip.has('fOpen'), true);
 				assert.strictEqual(me.reqMock.fflip.has('fClosed'), false);
@@ -272,7 +272,7 @@ describe('fflip', function(){
 		it('req.fflip.has() should throw when called before features have been set', function() {
 			var me = this;
 			assert.throws(function() {
-				fflip.express_middleware(this.reqMock, this.resMock, function() {
+				fflip.expressMiddleware(this.reqMock, this.resMock, function() {
 					me.reqMock.fflip.has('fOpen');
 				});
 			});
@@ -281,7 +281,7 @@ describe('fflip', function(){
 		it('req.fflip.featuers should be an empty object if setFeatures() has not been called', function(done) {
 			var me = this;
 			var consoleErrorStub = sandbox.stub(console, 'error'); // Supress Error Output
-			fflip.express_middleware(this.reqMock, this.resMock, function() {
+			fflip.expressMiddleware(this.reqMock, this.resMock, function() {
 				assert.ok(isObjectEmpty(me.reqMock.fflip.features));
 				done();
 				consoleErrorStub.restore();
@@ -290,12 +290,12 @@ describe('fflip', function(){
 
 		it('should mount express middleware into provided app', function() {
 			fflip.express(this.appMock);
-			assert.ok(this.appMock.use.calledWith(fflip.express_middleware));
+			assert.ok(this.appMock.use.calledWith(fflip.expressMiddleware));
 		});
 
 		it('should add GET route for manual feature flipping into provided app', function() {
 			fflip.express(this.appMock);
-			assert.ok(this.appMock.get.calledWith('/fflip/:name/:action', fflip.express_route));
+			assert.ok(this.appMock.get.calledWith('/fflip/:name/:action', fflip.expressRoute));
 		});
 
 	});
@@ -319,7 +319,7 @@ describe('fflip', function(){
 		it('should propogate a 404 error if feature does not exist', function(done) {
 			var next = sandbox.stub();
 			this.reqMock.params.name = 'doesnotexist';
-			fflip.express_route(this.reqMock, this.resMock, function(err) {
+			fflip.expressRoute(this.reqMock, this.resMock, function(err) {
 				assert(err);
 				assert(err.fflip);
 				assert.equal(err.statusCode, 404);
@@ -330,7 +330,7 @@ describe('fflip', function(){
 		it('should propogate a 500 error if cookies are not enabled', function(done) {
 			var next = sandbox.stub();
 			this.reqMock.cookies = null;
-			fflip.express_route(this.reqMock, this.resMock, function(err) {
+			fflip.expressRoute(this.reqMock, this.resMock, function(err) {
 				assert(err);
 				assert(err.fflip);
 				assert.equal(err.statusCode, 500);
@@ -339,7 +339,7 @@ describe('fflip', function(){
 		});
 
 		it('should set the right cookie flags', function() {
-			fflip.express_route(this.reqMock, this.resMock);
+			fflip.expressRoute(this.reqMock, this.resMock);
 			assert(this.resMock.cookie.calledWithMatch('fflip', {fClosed: true}, { maxAge: 900000 }));
 		});
 
@@ -347,14 +347,14 @@ describe('fflip', function(){
 			var oneMonthMs = 31 * 86400 * 1000;
 			var oldMaxCookieAge = fflip.maxCookieAge;
 			fflip.maxCookieAge = oneMonthMs;
-			fflip.express_route(this.reqMock, this.resMock);
+			fflip.expressRoute(this.reqMock, this.resMock);
 			fflip.maxCookieAge = oldMaxCookieAge;
 
 			assert(this.resMock.cookie.calledWithMatch('fflip', {fClosed: true}, { maxAge: oneMonthMs }));
 		});
 
 		it('should send back 200 json response on successful call', function() {
-			fflip.express_route(this.reqMock, this.resMock);
+			fflip.expressRoute(this.reqMock, this.resMock);
 			assert(this.resMock.json.calledWith(200));
 		});
 
@@ -381,7 +381,7 @@ describe('fflip', function(){
 		// });
 
 		// it('should call res.cookie() on successful request', function() {
-		//   self.express_route(this.reqMock, this.resMock);
+		//   self.expressRoute(this.reqMock, this.resMock);
 		//   assert(res.cookie.calledWith('fflip'));
 		// });
 

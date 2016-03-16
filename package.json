@@ -3,7 +3,7 @@
   "description": "Advanced Feature Flipping/Toggling Across the Server and Client",
   "author": "Fred Schott <fkschott@gmail.com>",
   "licence": "MIT",
-  "version": "2.2.2",
+  "version": "3.0.0",
   "main": "lib/fflip",
   "repository": "FredKSchott/fflip",
   "bugs": "https://github.com/FredKSchott/fflip/issues",

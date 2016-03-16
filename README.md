@@ -5,10 +5,10 @@
 
 Working on an experimental new design? Starting a closed beta? Rolling out a new feature over the next few weeks? Fa-fa-fa-flip it! __fflip__ gives you complete control over releasing new functionality to your users based on their user id, join date, membership status, and whatever else you can think of. __fflip's__ goal is to be the most powerful and extensible feature flipping/toggling module out there.
 
-- Describes __custom criteria and features__ using easy-to-read JSON
-- Delivers features down to the client for __client-side feature flipping__
-- Includes __Express Middleware__ for additional features like __feature flipping via cookie__
-- __System-Agnostic:__ Built to support any database, user representation or web framework you can throw at it
+- Create __custom criteria__ to segment users & features based on your audience.
+- __View & edit feature access__ in one easy place, and not scattered around your code base.
+- __System-Agnostic:__ Support any database, user representation or web framework you can throw at it.
+- __Extensible:__ Supports 3rd-party plugins for your favorite libraries (like [our Express integration](https://github.com/FredKSchott/fflip-express)!)
 
 ```
 npm install fflip --save
@@ -122,7 +122,6 @@ If you'd like to allow wider access to your feature while still preventing a spe
 - `.userHasFeature(user, featureName) -> boolean`: Return true/false if featureName is enabled for user
 - `.userFeatures(user) -> Object`: Return object of true/false for all features for user
 - `.reload() -> void`: Force a reload (if loading features dynamically)
-- `.express(app) -> void`: Connect with an Express app or router (see below)
 
 
 ### Configuration
@@ -168,48 +167,13 @@ fflip.config({
 });
 ```
 
+## Integrations
 
-## Express Integration
+As mentioned, fflip's goal is to be flexible enough to integrate with any web framework, database, or ORM. The following integrations are known to exist:
 
-fflip provides two easy integrations with the popular web framework [Express](http://expressjs.com/).
+- [fflip-express](https://github.com/FredKSchott/fflip-express): Express.js integration
 
-#### fflip.expressMiddleware()
-
-```javascript
-app.use(fflip.expressMiddleware);
-```
-
-**req.fflip:** A special fflip request object is attached to the request object, and includes the following functionality:
-
-```
-req.fflip = {
-  setForUser(user): Given a user, attaches the features object to the request (at req.fflip.features). Make sure you do this before calling has()!
-  has(featureName): Given a feature name, returns the feature boolean, undefined if feature doesn't exist. Throws an error if setForUser() hasn't been called
-}
-```
-
-**Use fflip in your templates:** Once `setForUser()` has been called, fflip will include a `Features` template variable that contains your user's enabled features. Here is an example of how to use it with Handlebars: `{{#if Features.closedBeta}} Welcome to the Beta! {{/if}}`
-
-**Use fflip on the client:** Once `setForUser()` has been called, fflip will also include a `FeaturesJSON` template variable that is the JSON string of your user's enabled features. To deliver this down to the client, just make sure your template something like this: `<script>var Features = {{ FeaturesJSON }}; </script>`.
-
-
-#### fflip.expressRoute()
-
-```javascript
-// Feel free to use any route you'd like, as long as `name` & `action` exist as route parameters.
-app.get('/custom_path/:name/:action', fflip.expressRoute);
-```
-
-**A route for manually flipping on/off features:** If you have cookies enabled, you can visit this route to manually override a feature to always return true/false for your own session. Just replace ':name' with the Feature name and ':action' with 1 to enable, 0 to disable, or -1 to reset (remove the cookie override). This override is stored in the user's cookie under the name `fflip`, which is then read by `fflip.expressMiddleware()` and `req.fflip` automatically.
-
-#### fflip.express()
-
-Sets up the express middleware and route automatically. Equivilent to running:
-
-```javascript
-app.use(fflip.expressMiddleware);
-app.get('/custom_path/:name/:action', fflip.expressRoute);
-```
+If you're interested in creating an integration, don't hesitate to reach out or create an issue if some functionality is missing. And if you've created an integration, please [add it](https://github.com/FredKSchott/fflip/edit/master/README.md) to the list above!
 
 
 ## Special Thanks

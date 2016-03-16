@@ -18,45 +18,84 @@ function isObjectEmpty(obj) {
 		}
 	}
 	return true;
-};
+}
 
 var sandbox = sinon.sandbox.create();
 var fflip = require('../lib/fflip');
 
 var configData = {
-	criteria: {
-		c1: function(user, bool) {
-			return bool;
+	criteria: [
+		{
+			id: 'c1',
+			check: function(user, bool) {
+				return bool;
+			}
 		},
-		c2: function(user, flag) {
-			return user.flag == flag;
+		{
+			id: 'c2',
+			check: function(user, flag) {
+				return user.flag == flag;
+			}
 		}
-	},
-	features: {
-		fEmpty: {},
-		fOpen: {
+	],
+	features: [
+		{
+			id: 'fEmpty'
+		},
+		{
+			id: 'fOpen',
 			name: 'fOpen',
 			description: 'true for all users',
 			criteria: {
 				c1: true
 			}
 		},
-		fClosed: {
+		{
+			id: 'fClosed',
 			criteria: {
 				c1: false
 			}
 		},
-		fEval: {
+		{
+			id: 'fEval',
 			criteria: {
+				c1: true,
 				c2: 'abc'
 			}
+		},
+		{
+			id: 'fEvalOr',
+			criteria: [
+				{c1: false},
+				{c2: 'abc'},
+				{c2: 'efg'}
+			]
+		},
+		{
+			id: 'fEvalComplex',
+			criteria: [
+				{c1: false, c2: 'abc'},
+				{c1: true, c2: 'abc'},
+				[{c1: false, c2: 'xyz'}, {c1: true, c2: 'efg'}]
+			]
+		},
+		{
+			id: 'fEvalVeto',
+			criteria: [
+				{c1: false},
+				{c2: 'abc'},
+				{c2: 'efg', $veto: true}
+			]
 		}
-	},
+	],
 	reload: 0
 };
 
 var userABC = {
 	flag: 'abc'
+};
+var userEFG = {
+	flag: 'efg'
 };
 var userXYZ = {
 	flag: 'xyz'
@@ -74,33 +113,61 @@ describe('fflip', function(){
 
 	describe('config()', function(){
 
-		it('should set features if given static feature object', function(){
+		it('should set features if given static feature array', function(){
 			fflip._features = {};
 			fflip.config(configData);
-			assert.equal(configData.features, fflip._features);
+			assert.deepEqual(fflip._features, {
+				fEmpty: configData.features[0],
+				fOpen: configData.features[1],
+				fClosed: configData.features[2],
+				fEval: configData.features[3],
+				fEvalOr: configData.features[4],
+				fEvalComplex: configData.features[5],
+				fEvalVeto: configData.features[6]
+			});
 		});
 
 		it('should set features if given a syncronous loading function', function(){
 			var loadSyncronously = function() {
 				return configData.features;
 			};
-			fflip.config({features: loadSyncronously});
-			assert.equal(configData.features, fflip._features);
+			fflip._features = {};
+			fflip.config({features: loadSyncronously, criteria: configData.criteria});
+			assert.deepEqual(fflip._features, {
+				fEmpty: configData.features[0],
+				fOpen: configData.features[1],
+				fClosed: configData.features[2],
+				fEval: configData.features[3],
+				fEvalOr: configData.features[4],
+				fEvalComplex: configData.features[5],
+				fEvalVeto: configData.features[6]
+			});
 		});
 
 		it('should set features if given an asyncronous loading function', function(done){
 			var loadAsyncronously = function(callback) {
 				callback(configData.features);
-				assert.equal(configData.features, fflip._features);
+				assert.deepEqual(fflip._features, {
+					fEmpty: configData.features[0],
+					fOpen: configData.features[1],
+					fClosed: configData.features[2],
+					fEval: configData.features[3],
+					fEvalOr: configData.features[4],
+					fEvalComplex: configData.features[5],
+					fEvalVeto: configData.features[6]
+				});
 				done();
 			};
-			fflip.config({features: loadAsyncronously});
+			fflip.config({features: loadAsyncronously, criteria: configData.criteria});
 		});
 
-		it('should set criteria if given static criteria object', function(){
+		it('should set criteria if given static criteria array', function(){
 			fflip._criteria = {};
 			fflip.config(configData);
-			assert.equal(configData.criteria, fflip._criteria);
+			assert.deepEqual(fflip._criteria, {
+				c1: configData.criteria[0].check,
+				c2: configData.criteria[1].check
+			});
 		});
 
 		it('should set reloadRate if given reload', function(){
@@ -111,7 +178,8 @@ describe('fflip', function(){
 
 	});
 
-	describe('reload()', function(){
+	describe('reload()', function() {
+
 		beforeEach(function() {
 
 		});
@@ -122,7 +190,7 @@ describe('fflip', function(){
 				callback({});
 				done();
 			};
-			fflip.config({features: loadAsyncronously, reload: 0.2});
+			fflip.config({features: loadAsyncronously, reload: 0.2, criteria: configData.criteria});
 		});
 
 		it('should update features', function(done){
@@ -133,7 +201,7 @@ describe('fflip', function(){
 				if(testReady)
 					done();
 			};
-			fflip.config({features: loadAsyncronously});
+			fflip.config({features: loadAsyncronously, criteria: configData.criteria});
 			testReady = true;
 			fflip.reload();
 		});
@@ -154,15 +222,41 @@ describe('fflip', function(){
 			assert.equal(false, fflip.isFeatureEnabledForUser('fEmpty', userABC));
 		});
 
+		// TODO(fks) 03-14-2016: (Edge Case) Test that an empty criteria object disables a feature
+
 		it('should return false if all feature critieria evaluates to false', function(){
 			assert.equal(false, fflip.isFeatureEnabledForUser('fClosed', userABC));
 			assert.equal(false, fflip.isFeatureEnabledForUser('fEval', userXYZ));
 		});
 
-		it('should return true if one feature critieria evaluates to true', function(){
-			assert.equal(true, fflip.isFeatureEnabledForUser('fOpen', userABC));
+		it('should return false if one feature critieria evaluates to true and the other evaluates to false', function(){
+			assert.equal(false, fflip.isFeatureEnabledForUser('fEval', userXYZ));
+		});
+
+		it('should return true if all feature critieria evaluates to true', function(){
 			assert.equal(true, fflip.isFeatureEnabledForUser('fEval', userABC));
 		});
+
+		it('should return false if zero feature critieria evaluates to true', function(){
+			assert.equal(false, fflip.isFeatureEnabledForUser('fEvalOr', userXYZ));
+		});
+
+		it('should return true if one feature critieria evaluates to true', function(){
+			assert.equal(true, fflip.isFeatureEnabledForUser('fEvalOr', userABC));
+		});
+
+		it('should handle nested arrays', function(){
+			assert.equal(true, fflip.isFeatureEnabledForUser('fEvalComplex', userABC));
+			assert.equal(true, fflip.isFeatureEnabledForUser('fEvalComplex', userEFG));
+			assert.equal(false, fflip.isFeatureEnabledForUser('fEvalComplex', userXYZ));
+		});
+
+		it('should handle the $veto property', function(){
+			assert.equal(false, fflip.isFeatureEnabledForUser('fEvalVeto', userABC));
+			assert.equal(true, fflip.isFeatureEnabledForUser('fEvalVeto', userEFG));
+			assert.equal(false, fflip.isFeatureEnabledForUser('fEvalVeto', userXYZ));
+		});
+
 
 	});
 
@@ -174,10 +268,37 @@ describe('fflip', function(){
 
 		it('should return an object of features for a user', function(){
 			var featuresABC = fflip.getFeaturesForUser(userABC);
-			assert.equal(featuresABC.fEmpty, false);
-			assert.equal(featuresABC.fOpen, true);
-			assert.equal(featuresABC.fClosed, false);
-			assert.equal(featuresABC.fEval, true);
+			assert.deepEqual(featuresABC, {
+				fEmpty: false,
+				fOpen: true,
+				fClosed: false,
+				fEval: true,
+				fEvalOr: true,
+				fEvalComplex: true,
+				fEvalVeto: false
+			});
+
+			var featuresEFG = fflip.getFeaturesForUser(userEFG);
+			assert.deepEqual(featuresEFG, {
+				fEmpty: false,
+				fOpen: true,
+				fClosed: false,
+				fEval: false,
+				fEvalOr: true,
+				fEvalComplex: true,
+				fEvalVeto: true
+			});
+
+			var featuresXYZ = fflip.getFeaturesForUser(userXYZ);
+			assert.deepEqual(featuresXYZ, {
+				fEmpty: false,
+				fOpen: true,
+				fClosed: false,
+				fEval: false,
+				fEvalOr: false,
+				fEvalComplex: false,
+				fEvalVeto: false
+			});
 		});
 
 		it('should overwrite values when flags are set', function() {
@@ -317,7 +438,6 @@ describe('fflip', function(){
 		});
 
 		it('should propogate a 404 error if feature does not exist', function(done) {
-			var next = sandbox.stub();
 			this.reqMock.params.name = 'doesnotexist';
 			fflip.expressRoute(this.reqMock, this.resMock, function(err) {
 				assert(err);
@@ -328,7 +448,6 @@ describe('fflip', function(){
 		});
 
 		it('should propogate a 500 error if cookies are not enabled', function(done) {
-			var next = sandbox.stub();
 			this.reqMock.cookies = null;
 			fflip.expressRoute(this.reqMock, this.resMock, function(err) {
 				assert(err);

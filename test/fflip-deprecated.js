@@ -65,6 +65,10 @@ var userXYZ = {
 
 describe('fflip (deprecated)', function(){
 
+	beforeEach(function() {
+		fflip.config(configData);
+	})
+
 	describe('express integration', function(){
 
 		it('express_middleware() still exists for v2.x backwards compatibility', function() {
@@ -73,6 +77,19 @@ describe('fflip (deprecated)', function(){
 
 		it('express_route() still exists for v2.x backwards compatibility', function() {
 			assert(fflip.express_route);
+		});
+
+	});
+
+	describe('userFeatures()', function(){
+
+		it('correct features are enabled when features and criteria use old format', function() {
+			assert.deepEqual(fflip.userFeatures(userABC), {
+				fEmpty: false,
+				fOpen: true,
+				fClosed: false,
+				fEval: true
+			});
 		});
 
 	});

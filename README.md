@@ -24,8 +24,8 @@ Below is a simple example that uses __fflip__ to deliver a closed beta to a frac
 var fflip = require('fflip');
 
 fflip.config({
-  criteria: ExampleCriteriaObject, // defined below
-  features: ExampleFeaturesObject  // defined below
+  criteria: ExampleCriteria, // defined below
+  features: ExampleFeatures  // defined below
 });
 
 // Get all of a user's enabled features...
@@ -35,7 +35,7 @@ if(someFreeUser.features.closedBeta === true) {
 }
 
 // ... or just check this single feature.
-if (fflip.userHasFeature('closedBeta', someFreeUser) === true) {
+if (fflip.userHasFeature(someFreeUser, 'closedBeta') === true) {
   console.log('Welcome to the Closed Beta!');
 }
 ```
@@ -102,14 +102,14 @@ The value present for each rule is passed in as the data argument to it's criter
 Rule sets & lists can be nested and combined. It can help to think of criteria sets as a group of `AND` operators, and lists as a set of `OR` operators.
 
 
-#### Veto Powers
+#### Veto Criteria
 
-If you'd like to allow wider access to your feature while still preventing a specific type of user, you can use the `$veto` property. If the `$veto` property is present on a member of a criteria list (array), and that member evaluates to false, the entire list will evaluate to false regardless of it's other members.
+If you'd like to allow wider access to your feature while still preventing a specific group of users, you can use the `$veto` property. If the `$veto` property is present on a member of a criteria list (array), and that member evaluates to false, the entire list will evaluate to false regardless of it's other members.
 
 ```javascript
 {
-  // Enabled if user is paid OR in the lucky 50% group of other users OR is using a modern browser
-  criteria: [{isPaidUser: true}, {percentageOfUsers: 0.50}, {usingModernBrowser: true}]
+  // Enabled if user is paid OR in the lucky 50% group of other users currently using a modern browser
+  criteria: [{isPaidUser: true}, {percentageOfUsers: 0.50, usingModernBrowser: true}]
   // Enabled if user is paid OR in the lucky 50% group of other users, BUT ONLY if using a modern browser
   criteria: [{isPaidUser: true}, {percentageOfUsers: 0.50}, {usingModernBrowser: true, $veto: true}]
 }
@@ -147,8 +147,8 @@ fflip also accepts functions for loading features. If fflip is passed a function
 var getFeaturesSync = function() {
   var collection = db.collection('features');
   var featuresArr = collection.find().toArray();
-  /* Process featuresArr -> featuresObj (format described above) */
-  return featuresObj;
+  /* Process/Format `featuresArr` if needed (format described above) */
+  return featuresArr;
 }
 
 // Load Features Asynchronously
@@ -156,8 +156,8 @@ var getFeaturesAsync = function(callback) {
   var collection = db.collection('features');
   collection.find().toArray(function(err, featuresArr) {
     /* Handle err
-     * Process featuresArr -> featuresObj (format described above) */
-    callback(featuresObj);
+     * Process/Format `featuresArr` if needed (format described above) */
+    callback(featuresArr);
   });
 }
 

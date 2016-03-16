@@ -4,30 +4,30 @@
 
 v4.0 brings some new changes to make fflip even more flexible. 
 
-#### New: Plugin Support
+#### New! Plugin Support
 
-FFlip has always promised to support every database & web framework. But up to this point, integrating FFlip with your web framework of choice hasn't been easy. Support for Express did come bundled, but it also took advantage of some private logic to work properly.
+FFlip has always promised to support every database & web framework. But up to this point, integrating fflip with your web framework of choice hasn't been easy. Support for Express did come bundled, but it also took advantage of some private logic to work properly.
 
-Starting with v4.0, FFlip will support a more open plugin architecture for integrations. The library interface will be more stable, and all previously private properties have been made public. We'll keep integrations open-ended for now, so how you build yours will be up to you. You can check out the new fflip-express for some inspiration and to see what's possible. We'll also try to keep a list of available plugins here.
+Starting with v4.0, fflip will support a more open plugin architecture for integrations. The library interface will be more stable, and all previously private properties have been made public. We'll keep integrations open-ended for now, so how you build yours will be up to you. You can check out the new fflip-express for some inspiration and to see what's possible. We'll also try to keep a list of available plugins here.
 
 
-#### Express Support Pulled Out
+#### Express Support Gets Pulled Out
 
-Given our new dedication to plugins, express support has been pulled out of the main library and into fflip-express. As such, the following methods & properties are now longer available:
+Given our new dedication to plugins, express support has been pulled out of the main library and into a new library called fflip-express. As such, the following methods & properties are now longer available:
 
 - `fflip.expressMiddleware()` (Will throw error when used)
 - `fflip.expressRoute()` (Will throw error when used)
 - `fflip.express()` (Will throw error when used)
 - `fflip.maxCookieAge` is no longer available / will do nothing if set directly
 
-Check out fflip-express readme for instructions on integrating with the new express plugin. At the time of writing all logic is still the same, so moving to the new librard should only require a couple small code changes.
+Check out the fflip-express README for instructions on how to set up the new plugin. At the time of writing all logic is still the same, so moving to the new librard should only require a couple small code changes.
 
 
 #### Updated Interface
 
-The following methods have new signatures:
+The following methods have new function signatures:
 
-- `fflip.userHasFeature(user, featureName)` -> `fflip.isFeatureEnabledForUser(featureName, user)`
+- `fflip.userHasFeature(user, featureName)` -> `fflip.isFeatureEnabledForUser(featureName, user)` (Note the new argument order)
 - `fflip.userFeatures(user)` -> `fflip.getFeaturesForUser(user)`
 
 The following private properties have been made public:

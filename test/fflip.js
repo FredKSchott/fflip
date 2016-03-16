@@ -165,8 +165,8 @@ describe('fflip', function(){
 			fflip.criteria = {};
 			fflip.config(configData);
 			assert.deepEqual(fflip.criteria, {
-				c1: configData.criteria[0].check,
-				c2: configData.criteria[1].check
+				c1: configData.criteria[0],
+				c2: configData.criteria[1]
 			});
 		});
 

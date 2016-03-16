@@ -20,14 +20,20 @@ var fflip = require('../lib/fflip');
 //------------------------------------------------------------------------------
 
 var configData = {
-	criteria: {
-		c1: function(user, bool) {
-			return bool;
+	criteria: [
+		{
+			id: 'c1',
+			check: function(user, bool) {
+				return bool;
+			}
 		},
-		c2: function(user, flag) {
-			return user.flag == flag;
+		{
+			id: 'c2',
+			check: function(user, flag) {
+				return user.flag == flag;
+			}
 		}
-	},
+	],
 	features: {
 		fEmpty: {},
 		fOpen: {

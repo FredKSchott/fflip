@@ -210,12 +210,12 @@ describe('fflip-express', function(){
 			});
 		});
 
-		it('req.fflip.setFeatures() should call userFeatures() with cookie flags', function(done) {
-			var spy = sandbox.spy(fflip, 'userFeatures');
+		it('req.fflip.setFeatures() should call getFeaturesForUser() with cookie flags', function(done) {
+			var spy = sandbox.spy(fflip, 'getFeaturesForUser');
 			expressIntegration.middleware(reqMock, resMock, function() {
 				reqMock.fflip.setForUser(userXYZ);
-				assert(fflip.userFeatures.calledOnce);
-				assert(fflip.userFeatures.calledWith(userXYZ, {fClosed: true}));
+				assert(fflip.getFeaturesForUser.calledOnce);
+				assert(fflip.getFeaturesForUser.calledWith(userXYZ, {fClosed: true}));
 				spy.restore();
 				done();
 			});

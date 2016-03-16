@@ -208,66 +208,66 @@ describe('fflip', function(){
 
 	});
 
-	describe('userHasFeature()', function() {
+	describe('isFeatureEnabledForUser()', function() {
 
 		beforeEach(function() {
 			fflip.config(configData);
 		});
 
 		it('should return null if features does not exist', function(){
-			assert.equal(null, fflip.userHasFeature(userABC, 'notafeature'));
+			assert.equal(null, fflip.isFeatureEnabledForUser('notafeature', userABC));
 		});
 
 		it('should return false if no criteria set', function(){
-			assert.equal(false, fflip.userHasFeature(userABC, 'fEmpty'));
+			assert.equal(false, fflip.isFeatureEnabledForUser('fEmpty', userABC));
 		});
 
 		// TODO(fks) 03-14-2016: (Edge Case) Test that an empty criteria object disables a feature
 
 		it('should return false if all feature critieria evaluates to false', function(){
-			assert.equal(false, fflip.userHasFeature(userABC, 'fClosed'));
-			assert.equal(false, fflip.userHasFeature(userXYZ, 'fEval'));
+			assert.equal(false, fflip.isFeatureEnabledForUser('fClosed', userABC));
+			assert.equal(false, fflip.isFeatureEnabledForUser('fEval', userXYZ));
 		});
 
 		it('should return false if one feature critieria evaluates to true and the other evaluates to false', function(){
-			assert.equal(false, fflip.userHasFeature(userXYZ, 'fEval'));
+			assert.equal(false, fflip.isFeatureEnabledForUser('fEval', userXYZ));
 		});
 
 		it('should return true if all feature critieria evaluates to true', function(){
-			assert.equal(true, fflip.userHasFeature(userABC, 'fEval'));
+			assert.equal(true, fflip.isFeatureEnabledForUser('fEval', userABC));
 		});
 
 		it('should return false if zero feature critieria evaluates to true', function(){
-			assert.equal(false, fflip.userHasFeature(userXYZ, 'fEvalOr'));
+			assert.equal(false, fflip.isFeatureEnabledForUser('fEvalOr', userXYZ));
 		});
 
 		it('should return true if one feature critieria evaluates to true', function(){
-			assert.equal(true, fflip.userHasFeature(userABC, 'fEvalOr'));
+			assert.equal(true, fflip.isFeatureEnabledForUser('fEvalOr', userABC));
 		});
 
 		it('should handle nested arrays', function(){
-			assert.equal(true, fflip.userHasFeature(userABC, 'fEvalComplex'));
-			assert.equal(true, fflip.userHasFeature(userEFG, 'fEvalComplex'));
-			assert.equal(false, fflip.userHasFeature(userXYZ, 'fEvalComplex'));
+			assert.equal(true, fflip.isFeatureEnabledForUser('fEvalComplex', userABC));
+			assert.equal(true, fflip.isFeatureEnabledForUser('fEvalComplex', userEFG));
+			assert.equal(false, fflip.isFeatureEnabledForUser('fEvalComplex', userXYZ));
 		});
 
 		it('should handle the $veto property', function(){
-			assert.equal(false, fflip.userHasFeature(userABC, 'fEvalVeto'));
-			assert.equal(true, fflip.userHasFeature(userEFG, 'fEvalVeto'));
-			assert.equal(false, fflip.userHasFeature(userXYZ, 'fEvalVeto'));
+			assert.equal(false, fflip.isFeatureEnabledForUser('fEvalVeto', userABC));
+			assert.equal(true, fflip.isFeatureEnabledForUser('fEvalVeto', userEFG));
+			assert.equal(false, fflip.isFeatureEnabledForUser('fEvalVeto', userXYZ));
 		});
 
 
 	});
 
-	describe('userFeatures()', function(){
+	describe('getFeaturesForUser()', function(){
 
 		beforeEach(function() {
 			fflip.config(configData);
 		});
 
 		it('should return an object of features for a user', function(){
-			var featuresABC = fflip.userFeatures(userABC);
+			var featuresABC = fflip.getFeaturesForUser(userABC);
 			assert.deepEqual(featuresABC, {
 				fEmpty: false,
 				fOpen: true,
@@ -278,7 +278,7 @@ describe('fflip', function(){
 				fEvalVeto: false
 			});
 
-			var featuresEFG = fflip.userFeatures(userEFG);
+			var featuresEFG = fflip.getFeaturesForUser(userEFG);
 			assert.deepEqual(featuresEFG, {
 				fEmpty: false,
 				fOpen: true,
@@ -289,7 +289,7 @@ describe('fflip', function(){
 				fEvalVeto: true
 			});
 
-			var featuresXYZ = fflip.userFeatures(userXYZ);
+			var featuresXYZ = fflip.getFeaturesForUser(userXYZ);
 			assert.deepEqual(featuresXYZ, {
 				fEmpty: false,
 				fOpen: true,
@@ -302,9 +302,9 @@ describe('fflip', function(){
 		});
 
 		it('should overwrite values when flags are set', function() {
-			var featuresXYZ = fflip.userFeatures(userXYZ);
+			var featuresXYZ = fflip.getFeaturesForUser(userXYZ);
 			assert.equal(featuresXYZ.fEval, false);
-			featuresXYZ = fflip.userFeatures(userXYZ, {fEval: true});
+			featuresXYZ = fflip.getFeaturesForUser(userXYZ, {fEval: true});
 			assert.equal(featuresXYZ.fEval, true);
 		});
 

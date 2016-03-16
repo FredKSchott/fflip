@@ -29,13 +29,13 @@ fflip.config({
 });
 
 // Get all of a user's enabled features...
-someFreeUser.features = fflip.getFeaturesForUser(someFreeUser);
+someFreeUser.features = fflip.userFeatures(someFreeUser);
 if(someFreeUser.features.closedBeta === true) {
   console.log('Welcome to the Closed Beta!');
 }
 
 // ... or just check this single feature.
-if (fflip.isFeatureEnabledForUser('closedBeta', someFreeUser) === true) {
+if (fflip.userHasFeature('closedBeta', someFreeUser) === true) {
   console.log('Welcome to the Closed Beta!');
 }
 ```
@@ -119,8 +119,8 @@ If you'd like to allow wider access to your feature while still preventing a spe
 ## Usage
 
 - `.config(options) -> void`: Configure fflip (see below)
-- `.isFeatureEnabledForUser(user, featureName) -> boolean`: Return true/false if featureName is enabled for user
-- `.getFeaturesForUser(user) -> Object`: Return object of true/false for all features for user
+- `.userHasFeature(user, featureName) -> boolean`: Return true/false if featureName is enabled for user
+- `.userFeatures(user) -> Object`: Return object of true/false for all features for user
 - `.reload() -> void`: Force a reload (if loading features dynamically)
 - `.express(app) -> void`: Connect with an Express app or router (see below)
 

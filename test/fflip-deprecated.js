@@ -65,40 +65,6 @@ var userXYZ = {
 
 describe('fflip (deprecated)', function(){
 
-	describe('userHasFeature()', function(){
-
-		beforeEach(function() {
-			fflip.config(configData);
-		});
-
-		it('should return null if features does not exist', function(){
-			assert.equal(null, fflip.userHasFeature(userABC, 'notafeature'));
-		});
-
-		it('should return false if no criteria set', function(){
-			assert.equal(false, fflip.userHasFeature(userABC, 'fEmpty'));
-		});
-
-		it('should return false if all feature critieria evaluates to false', function(){
-			assert.equal(false, fflip.userHasFeature(userABC, 'fClosed'));
-			assert.equal(false, fflip.userHasFeature(userXYZ, 'fEval'));
-		});
-
-		it('should return true if one feature critieria evaluates to true', function(){
-			assert.equal(true, fflip.userHasFeature(userABC, 'fOpen'));
-			assert.equal(true, fflip.userHasFeature(userABC, 'fEval'));
-		});
-
-	});
-
-	describe('userFeatures()', function(){
-
-		it('userFeatures() is equivilent to getFeaturesForUser()', function() {
-			assert.deepEqual(fflip.userFeatures(userABC), fflip.getFeaturesForUser(userABC));
-		});
-
-	});
-
 	describe('express integration', function(){
 
 		it('express_middleware() still exists for v2.x backwards compatibility', function() {

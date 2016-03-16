@@ -11,10 +11,13 @@
     "test": "grunt travis --verbose"
   },
   "devDependencies": {
+    "eslint": "^2.3.0",
+    "eslint-config-airbnb": "^6.1.0",
+    "eslint-plugin-react": "^4.2.1",
     "grunt": "~0.4.1",
     "grunt-mocha-test": "~0.7.0",
-    "supertest": "~0.8.1",
-    "sinon": "~1.7.3"
+    "sinon": "~1.7.3",
+    "supertest": "~0.8.1"
   },
   "keywords": [
     "feature",

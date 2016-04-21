@@ -15,6 +15,15 @@ npm install fflip --save
 ```
 
 
+## Integrations
+
+As mentioned, fflip's goal is to be flexible enough to integrate with any web framework, database, or ORM. The following integrations are known to exist:
+
+- [fflip-express](https://github.com/FredKSchott/fflip-express): Express.js integration
+
+If you're interested in creating an integration, don't hesitate to reach out or create an issue if some functionality is missing. And if you've created an integration, please [add it](https://github.com/FredKSchott/fflip/edit/master/README.md) to the list above!
+
+
 ## Getting Started
 
 Below is a simple example that uses __fflip__ to deliver a closed beta to a fraction of users:
@@ -166,15 +175,6 @@ fflip.config({
   reload: 60 // update available features every 60 seconds
 });
 ```
-
-## Integrations
-
-As mentioned, fflip's goal is to be flexible enough to integrate with any web framework, database, or ORM. The following integrations are known to exist:
-
-- [fflip-express](https://github.com/FredKSchott/fflip-express): Express.js integration
-
-If you're interested in creating an integration, don't hesitate to reach out or create an issue if some functionality is missing. And if you've created an integration, please [add it](https://github.com/FredKSchott/fflip/edit/master/README.md) to the list above!
-
 
 ## Special Thanks
 

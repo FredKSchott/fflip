@@ -20,14 +20,20 @@ var fflip = require('../lib/fflip');
 //------------------------------------------------------------------------------
 
 var configData = {
-	criteria: {
-		c1: function(user, bool) {
-			return bool;
+	criteria: [
+		{
+			id: 'c1',
+			check: function(user, bool) {
+				return bool;
+			}
 		},
-		c2: function(user, flag) {
-			return user.flag == flag;
+		{
+			id: 'c2',
+			check: function(user, flag) {
+				return user.flag == flag;
+			}
 		}
-	},
+	],
 	features: {
 		fEmpty: {},
 		fOpen: {
@@ -69,27 +75,48 @@ describe('fflip (deprecated)', function(){
 		fflip.config(configData);
 	})
 
-	describe('express integration', function(){
+	describe('userHasFeature()', function(){
 
-		it('express_middleware() still exists for v2.x backwards compatibility', function() {
-			assert(fflip.express_middleware);
+		beforeEach(function() {
+			fflip.config(configData);
 		});
 
-		it('express_route() still exists for v2.x backwards compatibility', function() {
-			assert(fflip.express_route);
+		it('should return null if features does not exist', function(){
+			assert.equal(null, fflip.userHasFeature(userABC, 'notafeature'));
+		});
+
+		it('should return false if no criteria set', function(){
+			assert.equal(false, fflip.userHasFeature(userABC, 'fEmpty'));
+		});
+
+		it('should return false if all feature critieria evaluates to false', function(){
+			assert.equal(false, fflip.userHasFeature(userABC, 'fClosed'));
+			assert.equal(false, fflip.userHasFeature(userXYZ, 'fEval'));
+		});
+
+		it('should return true if one feature critieria evaluates to true', function(){
+			assert.equal(true, fflip.userHasFeature(userABC, 'fOpen'));
+			assert.equal(true, fflip.userHasFeature(userABC, 'fEval'));
 		});
 
 	});
 
 	describe('userFeatures()', function(){
 
-		it('correct features are enabled when features and criteria use old format', function() {
-			assert.deepEqual(fflip.userFeatures(userABC), {
-				fEmpty: false,
-				fOpen: true,
-				fClosed: false,
-				fEval: true
-			});
+		it('userFeatures() is equivilent to getFeaturesForUser()', function() {
+			assert.deepEqual(fflip.userFeatures(userABC), fflip.getFeaturesForUser(userABC));
+		});
+
+	});
+
+	describe('express support', function(){
+
+		it('throws error when called', function() {
+			assert.throws(function() { fflip.express_middleware(); }, /fflip: Express support is no longer bundled/);
+			assert.throws(function() { fflip.expressMiddleware(); }, /fflip: Express support is no longer bundled/);
+			assert.throws(function() { fflip.express_route(); }, /fflip: Express support is no longer bundled/);
+			assert.throws(function() { fflip.expressRoute(); }, /fflip: Express support is no longer bundled/);
+			assert.throws(function() { fflip.express(); }, /fflip: Express support is no longer bundled/);
 		});
 
 	});

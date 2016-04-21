@@ -9,14 +9,14 @@ module.exports = function(grunt) {
           reporter: 'nyan',
           ui: 'bdd'
         },
-        src: ['test/*']
+        src: ['test/*.js', 'test/*/**.js']
       },
       spec: {
         options: {
           reporter: 'spec',
           ui: 'bdd'
         },
-        src: ['test/*']
+        src: ['test/*.js', 'test/*/**.js']
       }
     }
   });

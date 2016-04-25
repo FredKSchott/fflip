@@ -30,7 +30,7 @@ Below is a simple example that uses __fflip__ to deliver a closed beta to a frac
 
 ```javascript
 // Include fflip
-var fflip = require('fflip');
+let fflip = require('fflip');
 
 fflip.config({
   criteria: ExampleCriteria, // defined below
@@ -55,10 +55,10 @@ if (fflip.isFeatureEnabledForUser('closedBeta', someFreeUser) === true) {
 **Criteria** are the rules that define access to different features. Each criteria takes a user object and some data as arguments, and returns true/false if the user matches that criteria. You will use these criteria to restrict/allow features for different subsets of your userbase.
 
 ```javascript
-var ExampleCriteria = [
+let ExampleCriteria = [
   {
-    id: 'isPaidUser', // required
-    check: function(user, isPaid) { // required
+    id: 'isPaidUser',
+    check: function(user, isPaid) {
       return user.isPaid == isPaid;
     }
   },
@@ -85,7 +85,7 @@ var ExampleCriteria = [
 Features are described in the following way:
 
 ```javascript
-var ExampleFeatures = [
+let ExampleFeatures = [
   {
     id: 'closedBeta', // required
     // if `criteria` is in an object, ALL criteria in that set must evaluate to true to enable for user
@@ -98,10 +98,10 @@ var ExampleFeatures = [
   },
   {
     id: 'experimentalFeature',
-    name: 'An Experimental Feature', // user-defined properties are optional but can be used to add important metadata
+    name: 'An Experimental Feature', // user-defined properties are optional but can be used to add important metadata on both criteria & features
     description: 'Experimental feature still in development, useful for internal development', // user-defined
     owner: 'Fred K. Schott <fkschott@gmail.com>', // user-defined
-    enabled: false, // sets the feature on or off for all users, required unless `criteria` is present instead
+    enabled: false, // sets the feature on or off for all users, required if `criteria` is not present
   },
 ]
 ```
@@ -152,16 +152,16 @@ fflip also accepts functions for loading features. If fflip is passed a function
 
 ```javascript
 // Load Criteria Synchronously
-var getFeaturesSync = function() {
-  var collection = db.collection('features');
-  var featuresArr = collection.find().toArray();
+let getFeaturesSync = function() {
+  let collection = db.collection('features');
+  let featuresArr = collection.find().toArray();
   /* Process/Format `featuresArr` if needed (format described above) */
   return featuresArr;
 }
 
 // Load Features Asynchronously
-var getFeaturesAsync = function(callback) {
-  var collection = db.collection('features');
+let getFeaturesAsync = function(callback) {
+  let collection = db.collection('features');
   collection.find().toArray(function(err, featuresArr) {
     /* Handle err
      * Process/Format `featuresArr` if needed (format described above) */

@@ -16,6 +16,7 @@
     "eslint-plugin-react": "^4.2.1",
     "grunt": "~0.4.1",
     "grunt-mocha-test": "~0.7.0",
+    "mocha-as-promised": "^2.0.0",
     "sinon": "~1.7.3",
     "supertest": "~0.8.1"
   },

@@ -70,13 +70,10 @@ var userXYZ = {
 //------------------------------------------------------------------------------
 
 describe('fflip (deprecated)', function(){
-
 	beforeEach(function() {
 		fflip.config(configData);
 	})
-
 	describe('userHasFeature()', function(){
-
 		beforeEach(function() {
 			fflip.config(configData);
 		});
@@ -98,19 +95,15 @@ describe('fflip (deprecated)', function(){
 			assert.equal(true, fflip.userHasFeature(userABC, 'fOpen'));
 			assert.equal(true, fflip.userHasFeature(userABC, 'fEval'));
 		});
-
 	});
 
 	describe('userFeatures()', function(){
-
-		it('userFeatures() is equivilent to getFeaturesForUser()', function() {
-			assert.deepEqual(fflip.userFeatures(userABC), fflip.getFeaturesForUser(userABC));
+		it('userFeatures() is equivalent to getFeaturesForUserSync()', function() {
+			assert.deepEqual(fflip.userFeatures(userABC), fflip.getFeaturesForUserSync(userABC));
 		});
-
 	});
 
 	describe('express support', function(){
-
 		it('throws error when called', function() {
 			assert.throws(function() { fflip.express_middleware(); }, /fflip: Express support is no longer bundled/);
 			assert.throws(function() { fflip.expressMiddleware(); }, /fflip: Express support is no longer bundled/);
@@ -118,7 +111,5 @@ describe('fflip (deprecated)', function(){
 			assert.throws(function() { fflip.expressRoute(); }, /fflip: Express support is no longer bundled/);
 			assert.throws(function() { fflip.express(); }, /fflip: Express support is no longer bundled/);
 		});
-
 	});
-
 });

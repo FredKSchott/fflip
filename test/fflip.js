@@ -1,5 +1,6 @@
 'use strict';
 
+var Promise = global.Promise;
 
 //------------------------------------------------------------------------------
 // Requirements
@@ -7,13 +8,14 @@
 var assert = require('assert'),
 	sinon = require('sinon');
 
+require('mocha-as-promised')();
 
 //------------------------------------------------------------------------------
 // Helpers
 //------------------------------------------------------------------------------
 function isObjectEmpty(obj) {
-	for(var key in obj) {
-		if(obj.hasOwnProperty(key)) {
+	for (var key in obj) {
+		if (obj.hasOwnProperty(key)) {
 			return false;
 		}
 	}
@@ -91,6 +93,74 @@ var configData = {
 	reload: 0
 };
 
+var asyncConfigData = {
+	criteria: [
+		{
+			id: 'c1',
+			check: function(user, bool) {
+				return Promise.resolve(bool);
+			}
+		},
+		{
+			id: 'c2',
+			check: function(user, flag) {
+				return Promise.resolve(user.flag == flag);
+			}
+		}
+	],
+	features: [
+		{
+			id: 'fEmpty'
+		},
+		{
+			id: 'fOpen',
+			name: 'fOpen',
+			description: 'true for all users',
+			criteria: {
+				c1: true
+			}
+		},
+		{
+			id: 'fClosed',
+			criteria: {
+				c1: false
+			}
+		},
+		{
+			id: 'fEval',
+			criteria: {
+				c1: true,
+				c2: 'abc'
+			}
+		},
+		{
+			id: 'fEvalOr',
+			criteria: [
+				{c1: false},
+				{c2: 'abc'},
+				{c2: 'efg'}
+			]
+		},
+		{
+			id: 'fEvalComplex',
+			criteria: [
+				{c1: false, c2: 'abc'},
+				{c1: true, c2: 'abc'},
+				[{c1: false, c2: 'xyz'}, {c1: true, c2: 'efg'}]
+			]
+		},
+		{
+			id: 'fEvalVeto',
+			criteria: [
+				{c1: false},
+				{c2: 'abc'},
+				{c2: 'efg', $veto: true}
+			]
+		}
+	],
+	reload: 0
+}
+
 var userABC = {
 	flag: 'abc'
 };
@@ -101,18 +171,15 @@ var userXYZ = {
 	flag: 'xyz'
 };
 
-
 //------------------------------------------------------------------------------
 // Tests
 //------------------------------------------------------------------------------
 describe('fflip', function(){
-
 	afterEach(function(){
 		sandbox.verifyAndRestore();
 	});
 
 	describe('config()', function(){
-
 		it('should set features if given static feature array', function(){
 			fflip.features = {};
 			fflip.config(configData);
@@ -175,15 +242,9 @@ describe('fflip', function(){
 			fflip.config(configData);
 			assert.equal(configData.reload*1000, fflip._reloadRate);
 		});
-
 	});
 
 	describe('reload()', function() {
-
-		beforeEach(function() {
-
-		});
-
 		it('should be called every X seconds where X = reloadRate', function(done) {
 			this.timeout(205);
 			var loadAsyncronously = function(callback) {
@@ -205,69 +266,161 @@ describe('fflip', function(){
 			testReady = true;
 			fflip.reload();
 		});
-
 	});
 
-	describe('isFeatureEnabledForUser()', function() {
-
+	describe('isFeatureEnabledForUserSync()', function() {
 		beforeEach(function() {
 			fflip.config(configData);
 		});
 
 		it('should return null if features does not exist', function(){
-			assert.equal(null, fflip.isFeatureEnabledForUser('notafeature', userABC));
+			assert.equal(null, fflip.isFeatureEnabledForUserSync('notafeature', userABC));
 		});
 
 		it('should return false if no criteria set', function(){
-			assert.equal(false, fflip.isFeatureEnabledForUser('fEmpty', userABC));
+			assert.equal(false, fflip.isFeatureEnabledForUserSync('fEmpty', userABC));
 		});
 
 		// TODO(fks) 03-14-2016: (Edge Case) Test that an empty criteria object disables a feature
 
-		it('should return false if all feature critieria evaluates to false', function(){
-			assert.equal(false, fflip.isFeatureEnabledForUser('fClosed', userABC));
-			assert.equal(false, fflip.isFeatureEnabledForUser('fEval', userXYZ));
+		it('should return false if all feature criteria evaluates to false', function(){
+			assert.equal(false, fflip.isFeatureEnabledForUserSync('fClosed', userABC));
+			assert.equal(false, fflip.isFeatureEnabledForUserSync('fEval', userXYZ));
 		});
 
-		it('should return false if one feature critieria evaluates to true and the other evaluates to false', function(){
-			assert.equal(false, fflip.isFeatureEnabledForUser('fEval', userXYZ));
+		it('should return false if one feature criteria evaluates to true and the other evaluates to false', function(){
+			assert.equal(false, fflip.isFeatureEnabledForUserSync('fEval', userXYZ));
 		});
 
-		it('should return true if all feature critieria evaluates to true', function(){
-			assert.equal(true, fflip.isFeatureEnabledForUser('fEval', userABC));
+		it('should return true if all feature criteria evaluates to true', function(){
+			assert.equal(true, fflip.isFeatureEnabledForUserSync('fEval', userABC));
 		});
 
-		it('should return false if zero feature critieria evaluates to true', function(){
-			assert.equal(false, fflip.isFeatureEnabledForUser('fEvalOr', userXYZ));
+		it('should return false if zero feature criteria evaluates to true', function(){
+			assert.equal(false, fflip.isFeatureEnabledForUserSync('fEvalOr', userXYZ));
 		});
 
-		it('should return true if one feature critieria evaluates to true', function(){
-			assert.equal(true, fflip.isFeatureEnabledForUser('fEvalOr', userABC));
+		it('should return true if one feature criteria evaluates to true', function(){
+			assert.equal(true, fflip.isFeatureEnabledForUserSync('fEvalOr', userABC));
 		});
 
 		it('should handle nested arrays', function(){
-			assert.equal(true, fflip.isFeatureEnabledForUser('fEvalComplex', userABC));
-			assert.equal(true, fflip.isFeatureEnabledForUser('fEvalComplex', userEFG));
-			assert.equal(false, fflip.isFeatureEnabledForUser('fEvalComplex', userXYZ));
+			assert.equal(true, fflip.isFeatureEnabledForUserSync('fEvalComplex', userABC));
+			assert.equal(true, fflip.isFeatureEnabledForUserSync('fEvalComplex', userEFG));
+			assert.equal(false, fflip.isFeatureEnabledForUserSync('fEvalComplex', userXYZ));
 		});
 
 		it('should handle the $veto property', function(){
-			assert.equal(false, fflip.isFeatureEnabledForUser('fEvalVeto', userABC));
-			assert.equal(true, fflip.isFeatureEnabledForUser('fEvalVeto', userEFG));
-			assert.equal(false, fflip.isFeatureEnabledForUser('fEvalVeto', userXYZ));
+			assert.equal(false, fflip.isFeatureEnabledForUserSync('fEvalVeto', userABC));
+			assert.equal(true, fflip.isFeatureEnabledForUserSync('fEvalVeto', userEFG));
+			assert.equal(false, fflip.isFeatureEnabledForUserSync('fEvalVeto', userXYZ));
 		});
 
-
+		it('should error out if there are async criteria', function() {
+			fflip.config(asyncConfigData);
+			assert.throws(function () {
+				fflip.isFeatureEnabledForUserSync('fClosed', userABC);
+			}, new RegExp('asynchronous.+c1'));
+		});
 	});
 
-	describe('getFeaturesForUser()', function(){
+	describe('isFeatureEnabledForUser()', function() {
+		beforeEach(function() {
+			fflip.config(asyncConfigData);
+		});
 
+		it('should return null if features does not exist', function(){
+			return fflip.isFeatureEnabledForUser('notafeature', userABC)
+				.then(function(res) {
+					assert.equal(null, res);
+				});
+		});
+
+		it('should return false if no criteria set', function(){
+			return fflip.isFeatureEnabledForUser('fEmpty', userABC)
+				.then(function(res) {
+					assert.equal(false, res);
+				});
+		});
+
+		// TODO(fks) 03-14-2016: (Edge Case) Test that an empty criteria object disables a feature
+
+		it('should return false if all feature criteria evaluates to false', function(){
+			return Promise.all([
+				fflip.isFeatureEnabledForUser('fClosed', userABC),
+				fflip.isFeatureEnabledForUser('fEval', userXYZ)
+			])
+			.then(function(results) {
+				assert.deepEqual([false, false], results);
+			});
+		});
+
+		it('should return false if one feature criteria evaluates to true and the other evaluates to false', function(){
+			return fflip.isFeatureEnabledForUser('fEval', userXYZ)
+				.then(function(res) {
+					assert.equal(false, res);
+				});
+		});
+
+		it('should return true if all feature criteria evaluates to true', function(){
+			return fflip.isFeatureEnabledForUser('fEval', userABC)
+				.then(function(res) {
+					assert.equal(true, res);
+				});
+		});
+
+		it('should return false if zero feature criteria evaluates to true', function(){
+			return fflip.isFeatureEnabledForUser('fEvalOr', userXYZ)
+				.then(function(res) {
+					assert.equal(false, res);
+				});
+		});
+
+		it('should return true if one feature criteria evaluates to true', function(){
+			return fflip.isFeatureEnabledForUser('fEvalOr', userABC)
+				.then(function(res) {
+					assert.equal(true, res);
+				});
+		});
+
+		it('should handle nested arrays', function(){
+			return Promise.all([
+				fflip.isFeatureEnabledForUser('fEvalComplex', userABC),
+				fflip.isFeatureEnabledForUser('fEvalComplex', userEFG),
+				fflip.isFeatureEnabledForUser('fEvalComplex', userXYZ),
+			])
+			.then(function(results) {
+				assert.deepEqual([true, true, false], results);
+			})
+		});
+
+		it('should handle the $veto property', function(){
+			return Promise.all([
+				fflip.isFeatureEnabledForUser('fEvalVeto', userABC),
+				fflip.isFeatureEnabledForUser('fEvalVeto', userEFG),
+				fflip.isFeatureEnabledForUser('fEvalVeto', userXYZ),
+			])
+			.then(function(results) {
+				assert.deepEqual([false, true, false], results);
+			});
+		});
+
+		it('should still work if there are no async criteria', function() {
+			fflip.config(configData);
+			return fflip.isFeatureEnabledForUser('fClosed', userABC)
+				.then(function(res) {
+					assert.equal(false, res);
+				});
+		});
+	});
+
+	describe('getFeaturesForUserSync()', function(){
 		beforeEach(function() {
 			fflip.config(configData);
 		});
 
 		it('should return an object of features for a user', function(){
-			var featuresABC = fflip.getFeaturesForUser(userABC);
+			var featuresABC = fflip.getFeaturesForUserSync(userABC);
 			assert.deepEqual(featuresABC, {
 				fEmpty: false,
 				fOpen: true,
@@ -278,7 +431,7 @@ describe('fflip', function(){
 				fEvalVeto: false
 			});
 
-			var featuresEFG = fflip.getFeaturesForUser(userEFG);
+			var featuresEFG = fflip.getFeaturesForUserSync(userEFG);
 			assert.deepEqual(featuresEFG, {
 				fEmpty: false,
 				fOpen: true,
@@ -289,7 +442,7 @@ describe('fflip', function(){
 				fEvalVeto: true
 			});
 
-			var featuresXYZ = fflip.getFeaturesForUser(userXYZ);
+			var featuresXYZ = fflip.getFeaturesForUserSync(userXYZ);
 			assert.deepEqual(featuresXYZ, {
 				fEmpty: false,
 				fOpen: true,
@@ -302,12 +455,93 @@ describe('fflip', function(){
 		});
 
 		it('should overwrite values when flags are set', function() {
-			var featuresXYZ = fflip.getFeaturesForUser(userXYZ);
+			var featuresXYZ = fflip.getFeaturesForUserSync(userXYZ);
 			assert.equal(featuresXYZ.fEval, false);
-			featuresXYZ = fflip.getFeaturesForUser(userXYZ, {fEval: true});
+			featuresXYZ = fflip.getFeaturesForUserSync(userXYZ, {fEval: true});
 			assert.equal(featuresXYZ.fEval, true);
 		});
 
+		it('should error out if there are async criteria', function() {
+			fflip.config(asyncConfigData);
+			assert.throws(function () {
+				fflip.getFeaturesForUserSync(userXYZ);
+			}, new RegExp('asynchronous.+c1'));
+		});
 	});
 
+	describe('getFeaturesForUser()', function(){
+		beforeEach(function() {
+			fflip.config(asyncConfigData);
+		});
+
+		it('should return an object of features for a user', function(){
+			return Promise.all([
+				fflip.getFeaturesForUser(userABC),
+				fflip.getFeaturesForUser(userEFG),
+				fflip.getFeaturesForUser(userXYZ)
+			])
+			.then(function(features) {
+				var featuresABC = features[0];
+				var featuresEFG = features[1];
+				var featuresXYZ = features[2];
+
+				assert.deepEqual(featuresABC, {
+					fEmpty: false,
+					fOpen: true,
+					fClosed: false,
+					fEval: true,
+					fEvalOr: true,
+					fEvalComplex: true,
+					fEvalVeto: false
+				});
+
+				assert.deepEqual(featuresEFG, {
+					fEmpty: false,
+					fOpen: true,
+					fClosed: false,
+					fEval: false,
+					fEvalOr: true,
+					fEvalComplex: true,
+					fEvalVeto: true
+				});
+
+				assert.deepEqual(featuresXYZ, {
+					fEmpty: false,
+					fOpen: true,
+					fClosed: false,
+					fEval: false,
+					fEvalOr: false,
+					fEvalComplex: false,
+					fEvalVeto: false
+				});
+			});
+		});
+
+		it('should overwrite values when flags are set', function() {
+			return Promise.all([
+				fflip.getFeaturesForUser(userXYZ),
+				fflip.getFeaturesForUser(userXYZ, { fEval: true })
+			])
+			.then(function(features) {
+				assert.equal(features[0].fEval, false);
+				assert.equal(features[1].fEval, true);
+			});
+		});
+
+		it('should still work for sync criteria', function() {
+			fflip.config(configData);
+			return fflip.getFeaturesForUser(userXYZ)
+				.then(function(featuresXYZ) {
+					assert.deepEqual(featuresXYZ, {
+						fEmpty: false,
+						fOpen: true,
+						fClosed: false,
+						fEval: false,
+						fEvalOr: false,
+						fEvalComplex: false,
+						fEvalVeto: false
+					});
+				});
+		});
+	});
 });

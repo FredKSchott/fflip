@@ -38,21 +38,31 @@ fflip.config({
 });
 
 // Get all of a user's enabled features...
-someFreeUser.features = fflip.getFeaturesForUser(someFreeUser);
-if(someFreeUser.features.closedBeta === true) {
+fflip.getFeaturesForUser(someFreeUser)
+  .then(features => someFreeUser.features = features)
+  .then(() => {
+    if (someFreeUser.features.closedBeta === true) {
+      console.log('Welcome to the Closed Beta!'));
+    }
+  });
+
+// ... or just check a single feature.
+return fflip.isFeatureEnabledForUser('closedBeta', someFreeUser)
+  .then(inClosedBeta => inClosedBeta && console.log('Welcome to the Closed Beta!'));
+
+// Use the sync functions if no async checks are needed
+if (fflip.isFeatureEnabledForUserSync('closedBeta', someFreeUser) === true) {
   console.log('Welcome to the Closed Beta!');
 }
 
-// ... or just check this single feature.
-if (fflip.isFeatureEnabledForUser('closedBeta', someFreeUser) === true) {
-  console.log('Welcome to the Closed Beta!');
-}
 ```
 
 
 ### Criteria
 
 **Criteria** are the rules that define access to different features. Each criteria takes a user object and some data as arguments, and returns true/false if the user matches that criteria. You will use these criteria to restrict/allow features for different subsets of your userbase.
+
+If the criteria returns a Promise, it is considered async and cannot be used with the synchronous API.
 
 ```javascript
 let ExampleCriteria = [
@@ -72,6 +82,13 @@ let ExampleCriteria = [
     id: 'allowUserIDs',
     check: function(user, allowedIDs) {
       return allowedIDs.indexOf(user.id) > -1;
+    }
+  },
+  {
+    id: 'underMessageLimit',
+    check: function(user, maxMessages) {
+      return Db.countMessages(user)
+        .then(count => count < maxMessages);
     }
   }
 ];
@@ -128,8 +145,10 @@ If you'd like to allow wider access to your feature while still preventing a spe
 ## Usage
 
 - `.config(options) -> void`: Configure fflip (see below)
-- `.isFeatureEnabledForUser(featureName, user) -> boolean`: Return true/false if featureName is enabled for user
-- `.getFeaturesForUser(user) -> Object`: Return object of true/false for all features for user
+- `.isFeatureEnabledForUser(featureName, user) -> Promise`: Resolves true/false if featureName is enabled for user
+- `.isFeatureEnabledForUserSync(featureName, user) -> boolean`: Returns true/false if featureName is enabled for user
+- `.getFeaturesForUser(user) -> Object`: Resolves object of true/false for all features for user
+- `.getFeaturesForUserSync(user) -> Object`: Returns object of true/false for all features for user
 - `.reload() -> void`: Force a reload (if loading features dynamically)
 
 

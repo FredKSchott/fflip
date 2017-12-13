@@ -3,7 +3,7 @@
 </a>
 <h1><img src="http://fredkschott.com/img/fflipIcon2.png" /> fflip</h1>
 
-Working on an experimental new design? Starting a closed beta? Rolling out a new feature over the next few weeks? Fa-fa-fa-flip it! __fflip__ gives you complete control over releasing new functionality to your users based on their user id, join date, membership status, and whatever else you can think of. __fflip's__ goal is to be the most powerful and extensible feature flipping/toggling module out there.
+Working on an experimental new design? Starting a closed beta? Rolling out a new feature over the next few weeks? Fa-fa-fa-flip it. __fflip__ gives you complete control over releasing new functionality to your users based on their user id, join date, membership status, and whatever else you can think of. __fflip's__ goal is to be the most powerful and extensible feature flipping/toggling module out there.
 
 - Create __custom criteria__ to segment users & features based on your audience.
 - __View & edit feature access__ in one easy place, and not scattered around your code base.

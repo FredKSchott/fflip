@@ -161,6 +161,24 @@ describe('fflip', function(){
 			fflip.config({features: loadAsyncronously, criteria: configData.criteria});
 		});
 
+		it('should invoke the callback after asynchronous features have been loaded', function(done){
+			var loadAsyncronously = function(callback) {
+				callback(configData.features);
+			};
+			fflip.config({features: loadAsyncronously, criteria: configData.criteria}, function() {
+				assert.deepEqual(fflip.features, {
+					fEmpty: configData.features[0],
+					fOpen: configData.features[1],
+					fClosed: configData.features[2],
+					fEval: configData.features[3],
+					fEvalOr: configData.features[4],
+					fEvalComplex: configData.features[5],
+					fEvalVeto: configData.features[6]
+				});
+				done();
+			});
+		});
+
 		it('should set criteria if given static criteria array', function(){
 			fflip.criteria = {};
 			fflip.config(configData);
@@ -204,6 +222,17 @@ describe('fflip', function(){
 			fflip.config({features: loadAsyncronously, criteria: configData.criteria});
 			testReady = true;
 			fflip.reload();
+		});
+
+		it('should invoke the callback after asynchronous features have been loaded', function(done) {
+			this.timeout(100);
+			var loadAsyncronously = function(callback) {
+				callback({});
+			};
+			fflip.config({features: loadAsyncronously, criteria: configData.criteria});
+			fflip.reload(function() {
+				done();
+			});
 		});
 
 	});

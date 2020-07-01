@@ -11,7 +11,7 @@
     "test": "grunt travis --verbose"
   },
   "devDependencies": {
-    "eslint": "^2.3.0",
+    "eslint": "^7.3.1",
     "eslint-config-airbnb": "^6.1.0",
     "eslint-plugin-react": "^4.2.1",
     "grunt": "~0.4.1",

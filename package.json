@@ -1,12 +1,17 @@
 {
-  "name": "fflip",
+  "name": "@khajvah/fflip",
   "description": "Advanced Feature Flipping/Toggling Across the Server and Client",
   "author": "Fred Schott <fkschott@gmail.com>",
   "licence": "MIT",
   "version": "4.0.0",
   "main": "lib/fflip",
-  "repository": "FredKSchott/fflip",
-  "bugs": "https://github.com/FredKSchott/fflip/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FredKSchott/fflip.git"
+  },
+  "bugs": {
+    "url": "https://github.com/FredKSchott/fflip/issues"
+  },
   "scripts": {
     "test": "grunt travis --verbose"
   },
@@ -26,5 +31,11 @@
     "feature flag",
     "feature flagging",
     "continuous integration"
-  ]
+  ],
+  "homepage": "https://github.com/FredKSchott/fflip#readme",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "license": "ISC"
 }

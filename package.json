@@ -1,21 +1,19 @@
 {
-  "name": "@khajvah/fflip",
+  "name": "fflip",
   "description": "Advanced Feature Flipping/Toggling Across the Server and Client",
   "author": "Fred Schott <fkschott@gmail.com>",
   "licence": "MIT",
   "version": "4.0.0",
   "main": "lib/fflip",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/FredKSchott/fflip.git"
-  },
-  "bugs": {
-    "url": "https://github.com/FredKSchott/fflip/issues"
-  },
+  "repository": "FredKSchott/fflip",
+  "bugs": "https://github.com/FredKSchott/fflip/issues",
   "scripts": {
     "test": "grunt travis --verbose"
   },
   "devDependencies": {
+    "eslint": "^2.3.0",
+    "eslint-config-airbnb": "^6.1.0",
+    "eslint-plugin-react": "^4.2.1",
     "grunt": "~0.4.1",
     "grunt-mocha-test": "~0.7.0",
     "sinon": "~1.7.3",
@@ -31,11 +29,5 @@
     "feature flag",
     "feature flagging",
     "continuous integration"
-  ],
-  "homepage": "https://github.com/FredKSchott/fflip#readme",
-  "directories": {
-    "lib": "lib",
-    "test": "test"
-  },
-  "license": "ISC"
+  ]
 }

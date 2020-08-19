@@ -146,7 +146,7 @@ describe('fflip', function(){
 
 		it('should set features if given an asyncronous loading function', function(done){
 			var loadAsyncronously = function(callback) {
-				callback(configData.features);
+				callback(undefined, configData.features);
 				assert.deepEqual(fflip.features, {
 					fEmpty: configData.features[0],
 					fOpen: configData.features[1],
@@ -163,9 +163,10 @@ describe('fflip', function(){
 
 		it('should invoke the callback after asynchronous features have been loaded', function(done){
 			var loadAsyncronously = function(callback) {
-				callback(configData.features);
+				callback(undefined, configData.features);
 			};
-			fflip.config({features: loadAsyncronously, criteria: configData.criteria}, function() {
+			fflip.config({features: loadAsyncronously, criteria: configData.criteria}, function(err) {
+				assert.equal(err, undefined);
 				assert.deepEqual(fflip.features, {
 					fEmpty: configData.features[0],
 					fOpen: configData.features[1],
@@ -175,6 +176,17 @@ describe('fflip', function(){
 					fEvalComplex: configData.features[5],
 					fEvalVeto: configData.features[6]
 				});
+				done();
+			});
+		});
+
+		it('should invoke the callback after asynchronous features have failed', function(done){
+			var error = new Error();
+			var loadAsyncronously = function(callback) {
+				callback(error);
+			};
+			fflip.config({features: loadAsyncronously, criteria: configData.criteria}, function(err) {
+				assert.equal(err, error);
 				done();
 			});
 		});
@@ -205,7 +217,7 @@ describe('fflip', function(){
 		it('should be called every X seconds where X = reloadRate', function(done) {
 			this.timeout(205);
 			var loadAsyncronously = function(callback) {
-				callback({});
+				callback(undefined, {});
 				done();
 			};
 			fflip.config({features: loadAsyncronously, reload: 0.2, criteria: configData.criteria});
@@ -215,7 +227,7 @@ describe('fflip', function(){
 			this.timeout(100);
 			var testReady = false;
 			var loadAsyncronously = function(callback) {
-				callback({});
+				callback(undefined, {});
 				if(testReady)
 					done();
 			};
@@ -227,10 +239,26 @@ describe('fflip', function(){
 		it('should invoke the callback after asynchronous features have been loaded', function(done) {
 			this.timeout(100);
 			var loadAsyncronously = function(callback) {
-				callback({});
+				callback(undefined, {});
 			};
 			fflip.config({features: loadAsyncronously, criteria: configData.criteria});
-			fflip.reload(function() {
+			fflip.reload(function(err) {
+				assert.equal(err, undefined);
+				done();
+			});
+		});
+
+		it('should invoke the callback after asynchronous features have failed', function(done) {
+			this.timeout(100);
+			var error = new Error();
+			var testReady = false;
+			var loadAsyncronously = function(callback) {
+				callback(testReady ? error : undefined, {});
+			};
+			fflip.config({features: loadAsyncronously, criteria: configData.criteria});
+			testReady = true;
+			fflip.reload(function(err) {
+				assert.equal(err, error);
 				done();
 			});
 		});

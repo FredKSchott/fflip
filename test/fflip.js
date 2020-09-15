@@ -166,7 +166,7 @@ describe('fflip', function(){
 				callback(undefined, configData.features);
 			};
 			fflip.config({features: loadAsyncronously, criteria: configData.criteria}, function(err) {
-				assert.equal(err, undefined);
+				assert(!err);
 				assert.deepEqual(fflip.features, {
 					fEmpty: configData.features[0],
 					fOpen: configData.features[1],
@@ -243,7 +243,7 @@ describe('fflip', function(){
 			};
 			fflip.config({features: loadAsyncronously, criteria: configData.criteria});
 			fflip.reload(function(err) {
-				assert.equal(err, undefined);
+				assert(!err);
 				done();
 			});
 		});

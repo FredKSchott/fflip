@@ -11,7 +11,6 @@
 // Requirements
 //------------------------------------------------------------------------------
 var assert = require('assert');
-
 var fflip = require('../lib/fflip');
 
 
